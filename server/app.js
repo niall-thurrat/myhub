@@ -4,10 +4,12 @@ import bodyParser from 'body-parser'
 import { routes } from './routes'
 
 const app = express()
+const logger = require('morgan')
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(logger('dev'))
 
 // routes
 app.use('/', routes.home)

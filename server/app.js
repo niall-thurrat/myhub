@@ -1,10 +1,26 @@
+/**
+ * The starting point of the application.
+ *
+ * @author Niall Thurrat
+ * @version 1.0.0
+ */
+
+'use strict'
+
 import express from 'express'
 import bodyParser from 'body-parser'
+import mongoose from './config/mongoose'
 
 import { routes } from './routes'
 
 const app = express()
 const logger = require('morgan')
+
+// connect to mongoDB via mongoose
+mongoose.run().catch(error => {
+  console.error(error)
+  process.exit(1)
+})
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }))

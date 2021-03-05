@@ -28,8 +28,8 @@ app.use(bodyParser.json())
 app.use(logger('dev'))
 
 // routes
-app.use('/', routes.home)
-app.use('/test', routes.test)
+app.use('/', routes.root)
+app.use('/groups', routes.groups)
 
 // Run Server
 app.listen(8080, () => {

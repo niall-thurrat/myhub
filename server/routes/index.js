@@ -1,8 +1,16 @@
+/**
+ * Routes index
+ *
+ * @author Niall Thurrat
+ * @version 1.0.0
+ */
 
-import homeRouter from './homeRouter'
-import testRouter from './testRouter'
+'use strict'
+
+import rootRouter from './rootRouter'
+import groupsRouter from './groupsRouter'
 
 export const routes = {}
 
-routes.home = homeRouter
-routes.test = testRouter
+routes.root = rootRouter
+routes.groups = groupsRouter

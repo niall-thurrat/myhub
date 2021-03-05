@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 
-// IN ORIGINAL import './index.css'
+// IN ORIGINAL import './index.css' ///////////////////////////////// if styling screws up put this in
 import App from './App'
 // IN ORIGINAL import reportWebVitals from './reportWebVitals'
 import * as serviceWorker from './serviceWorker'

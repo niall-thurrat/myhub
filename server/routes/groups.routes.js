@@ -8,7 +8,7 @@
 'use strict'
 
 import express from 'express'
-import groupsContoller from '../controllers/groups'
+import groupsContoller from '../controllers/groups.controller'
 
 const groupsRouter = express.Router()
 

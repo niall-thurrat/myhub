@@ -8,7 +8,7 @@
 'use strict'
 
 import express from 'express'
-import rootContoller from '../controllers/root'
+import rootContoller from '../controllers/root.controller'
 
 const rootRouter = express.Router()
 

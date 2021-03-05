@@ -7,10 +7,10 @@
 
 'use strict'
 
-import rootRouter from './rootRouter'
-import groupsRouter from './groupsRouter'
+import rootRoutes from './root.routes'
+import groupsRoutes from './groups.routes'
 
 export const routes = {}
 
-routes.root = rootRouter
-routes.groups = groupsRouter
+routes.root = rootRoutes
+routes.groups = groupsRoutes

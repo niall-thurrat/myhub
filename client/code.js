@@ -5,10 +5,15 @@ export default class GroupsList extends Component {
   constructor (props) {
     super(props)
     this.retrieveGroups = this.retrieveGroups.bind(this)
+    this.setActiveGroup = this.setActiveGroup.bind(this)
 
     this.state = {
-      groups: []
+      groups: [],
+      currentGroup: null,
+      currentIndex: -1
     }
+
+    console.log('constructor ok')
   }
 
   componentDidMount () {
@@ -21,14 +26,24 @@ export default class GroupsList extends Component {
         this.setState({
           groups: response.data
         })
+        console.log(`retrieveGroups state set response.data: ${response.data}`)
       })
       .catch(e => {
-        console.log(e)
+        console.log(`retrieveGroups error: ${e}`)
       })
   }
 
+  setActiveGroup (group, index) {
+    this.setState({
+      currentGroup: group,
+      currentIndex: index
+    })
+  }
+
   render () {
-    const groups = this.state.groups.data
+    const { groups, currentIndex } = this.state
+
+    console.log(`render firing - groups?: ${groups}`)
 
     return (
       <div className='list row'>
@@ -38,7 +53,14 @@ export default class GroupsList extends Component {
           <ul className='list-group'>
             {groups &&
               groups.map((group, index) => (
-                <li className='list-group-item' key={index}>
+                <li
+                  className={
+                    'list-group-item ' +
+                    (index === currentIndex ? 'active' : '')
+                  }
+                  onClick={() => this.setActiveGroup(group, index)}
+                  key={index}
+                >
                   {group.full_name}
                 </li>
               ))}

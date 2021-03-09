@@ -2,10 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 
-// IN ORIGINAL import './index.css' ///////////////////////////////// if styling screws up put this in
+import './index.css'
 import App from './App'
-// IN ORIGINAL import reportWebVitals from './reportWebVitals'
-import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
   <BrowserRouter>
@@ -13,10 +11,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 )
-
-serviceWorker.unregister()
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// IN ORIGINAL reportWebVitals()

@@ -34,19 +34,17 @@ groupsController.list = (req, res) => {
     .then(res => res.json())
     .then(json => {
       // handle large lists of groups here?
-      const groupsList = {}
-      let index = 0
+      const resJson = {}
+      resJson.data = []
 
       json.forEach(value => {
         const listItem = {}
         listItem.id = value.id
         listItem.full_name = value.full_name
 
-        groupsList[index] = listItem
-        index++
+        resJson.data.push(listItem)
       })
-
-      res.status(200).json(groupsList)
+      res.status(200).json(resJson)
     })
 }
 

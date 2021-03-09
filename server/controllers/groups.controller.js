@@ -16,13 +16,31 @@ const uri = 'https://gitlab.lnu.se/api/v4/groups'
 const groupsController = {}
 
 groupsController.getAll = (req, res) => {
+  const query = req.query.name
+  const nameQuery = query ? query.toLowerCase() : null
+
   fetch(uri, {
     method: 'GET',
     'PRIVATE-TOKEN': process.env.GL_TOKEN
   })
     .then(res => res.json())
-    .then(json => {
-      res.status(200).json(json)
+    .then(allGroups => {
+      const queryGroups = { data: [] }
+
+      if (nameQuery) {
+        allGroups.forEach((group) => {
+          const name = group.full_name.toLowerCase()
+
+          if (name.includes(nameQuery)) {
+            const newJson = trimGroupJson(group)
+            queryGroups.data.push(newJson)
+          }
+        })
+      }
+      const resJson = queryGroups.data[0] ? queryGroups : allGroups
+      console.log(resJson)
+
+      res.status(200).json(resJson)
     })
 }
 
@@ -33,16 +51,11 @@ groupsController.list = (req, res) => {
   })
     .then(res => res.json())
     .then(json => {
-      // handle large lists of groups here?
-      const resJson = {}
-      resJson.data = []
+      const resJson = { data: [] }
 
-      json.forEach(value => {
-        const listItem = {}
-        listItem.id = value.id
-        listItem.full_name = value.full_name
-
-        resJson.data.push(listItem)
+      json.forEach(group => {
+        const newJson = trimGroupJson(group)
+        resJson.data.push(newJson)
       })
       res.status(200).json(resJson)
     })
@@ -65,6 +78,17 @@ groupsController.get = (req, res) => {
 
       res.status(200).json(group)
     })
+}
+
+// can this be done mush neater with .map or something?
+function trimGroupJson (json) {
+  const newJson = {}
+
+  newJson.id = json.id
+  newJson.full_name = json.full_name
+  newJson.description = json.description
+
+  return newJson
 }
 
 export default groupsController

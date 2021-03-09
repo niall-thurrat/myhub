@@ -15,7 +15,7 @@ const uri = 'https://gitlab.lnu.se/api/v4/groups'
 
 const groupsController = {}
 
-groupsController.all = (req, res) => {
+groupsController.getAll = (req, res) => {
   fetch(uri, {
     method: 'GET',
     'PRIVATE-TOKEN': process.env.GL_TOKEN
@@ -45,6 +45,25 @@ groupsController.list = (req, res) => {
         resJson.data.push(listItem)
       })
       res.status(200).json(resJson)
+    })
+}
+
+groupsController.get = (req, res) => {
+  const groupId = req.params.id
+  const groupUri = uri + '/' + groupId
+
+  fetch(groupUri, {
+    method: 'GET',
+    'PRIVATE-TOKEN': process.env.GL_TOKEN
+  })
+    .then(res => res.json())
+    .then(json => {
+      const group = {
+        id: json.id,
+        full_name: json.full_name
+      }
+
+      res.status(200).json(group)
     })
 }
 

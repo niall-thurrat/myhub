@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 import GroupsList from './components/groups-list.component'
+import Group from './components/group.component'
 
 class App extends Component {
   render () {
@@ -15,8 +16,8 @@ class App extends Component {
           </a>
           <div className='navbar-nav mr-auto'>
             <li className='nav-item'>
-              <Link to='/groups-list' className='nav-link'>
-                Groups List
+              <Link to='/' className='nav-link'>
+                home again
               </Link>
             </li>
           </div>
@@ -25,6 +26,7 @@ class App extends Component {
         <div className='container mt-3'>
           <Switch>
             <Route exact path='/' component={GroupsList} />
+            <Route path='/groups/:id' component={Group} />
           </Switch>
         </div>
       </div>

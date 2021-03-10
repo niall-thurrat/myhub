@@ -122,6 +122,12 @@ export default class GroupsList extends Component {
               </div>
               <div>
                 <label>
+                  <strong>Id:</strong>
+                </label>{' '}
+                {currentGroup.id}
+              </div>
+              <div>
+                <label>
                   <strong>Description:</strong>
                 </label>{' '}
                 {currentGroup.description}

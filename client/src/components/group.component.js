@@ -9,7 +9,8 @@ export default class Group extends Component {
     this.state = {
       currentGroup: {
         id: null,
-        full_name: ''
+        full_name: '',
+        description: ''
       }
     }
   }
@@ -32,33 +33,31 @@ export default class Group extends Component {
   }
 
   render () {
-    const currentTutorial = this.state.currentTutorial
+    const currentGroup = this.state.currentGroup
 
     return (
       <div>
-        {currentTutorial ? (
-          <div className='edit-form'>
+        {currentGroup ? (
+          <div>
             <h4>Group</h4>
-            <form>
-              <div className='form-group'>
-                <label htmlFor='group'>Group Name</label>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='full_name'
-                  value={currentTutorial.full_name}
-                />
-              </div>
-              <div className='form-group'>
-                <label htmlFor='id'>ID</label>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='id'
-                  value={currentTutorial.id}
-                />
-              </div>
-            </form>
+            <div>
+              <label>
+                <strong>Full Name:</strong>
+              </label>{' '}
+              {currentGroup.full_name}
+            </div>
+            <div>
+              <label>
+                <strong>Id:</strong>
+              </label>{' '}
+              {currentGroup.id}
+            </div>
+            <div>
+              <label>
+                <strong>Description:</strong>
+              </label>{' '}
+              {currentGroup.description}
+            </div>
           </div>
         ) : (
           <div>

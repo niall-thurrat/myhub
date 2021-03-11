@@ -10,7 +10,7 @@ class GroupsListDataService {
   }
 
   findByName (name) {
-    return http.get(`/groups?name=${name}`)
+    return http.get(`/groups/list?name=${name}`)
   }
 }
 

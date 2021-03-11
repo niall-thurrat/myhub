@@ -12,7 +12,7 @@ import groupsContoller from '../controllers/groups.controller'
 
 const groupsRouter = express.Router()
 
-groupsRouter.get('/', groupsContoller.getAll)
+// groupsRouter.get('/', groupsContoller.getAll)
 groupsRouter.get('/list', groupsContoller.list)
 groupsRouter.get('/:id', groupsContoller.get)
 

@@ -124,7 +124,7 @@ export default class GroupsList extends Component {
                 <label>
                   <strong>Id:</strong>
                 </label>{' '}
-                {currentGroup.id}
+                {currentGroup.groupId}
               </div>
               <div>
                 <label>
@@ -134,7 +134,7 @@ export default class GroupsList extends Component {
               </div>
 
               <Link
-                to={'/groups/' + currentGroup.id}
+                to={'/groups/' + currentGroup.groupId}
                 className='badge badge-warning'
               >
                 Go To Dashboard

@@ -8,7 +8,7 @@ export default class Group extends Component {
 
     this.state = {
       currentGroup: {
-        id: null,
+        groupId: null,
         full_name: '',
         description: ''
       }
@@ -19,18 +19,29 @@ export default class Group extends Component {
     this.getGroup(this.props.match.params.id)
   }
 
-  getGroup (id) {
-    GroupsListDataService.get(id)
+  getGroup (groupId) {
+    GroupsListDataService.get(groupId)
       .then(response => {
         this.setState({
           currentGroup: response.data
         })
-        console.log(response.data)
       })
       .catch(e => {
         console.log(e)
       })
   }
+
+  // getCommits (groupId) {
+  //   GroupsListDataService.get(groupId)
+  //     .then(response => {
+  //       this.setState({
+  //         currentGroup: response.data
+  //       })
+  //     })
+  //     .catch(e => {
+  //       console.log(e)
+  //     })
+  // }
 
   render () {
     const currentGroup = this.state.currentGroup
@@ -50,7 +61,7 @@ export default class Group extends Component {
               <label>
                 <strong>Id:</strong>
               </label>{' '}
-              {currentGroup.id}
+              {currentGroup.groupId}
             </div>
             <div>
               <label>

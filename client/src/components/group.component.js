@@ -11,12 +11,14 @@ export default class Group extends Component {
         groupId: null,
         full_name: '',
         description: ''
-      }
+      },
+      groupCommits: null
     }
   }
 
   componentDidMount () {
     this.getGroup(this.props.match.params.id)
+    this.getCommits(this.props.match.params.id)
   }
 
   getGroup (groupId) {
@@ -31,51 +33,78 @@ export default class Group extends Component {
       })
   }
 
-  // getCommits (groupId) {
-  //   GroupsListDataService.get(groupId)
-  //     .then(response => {
-  //       this.setState({
-  //         currentGroup: response.data
-  //       })
-  //     })
-  //     .catch(e => {
-  //       console.log(e)
-  //     })
-  // }
+  getCommits (groupId) {
+    GroupsListDataService.getCommits(groupId)
+      .then(response => {
+        this.setState({
+          groupCommits: response.data
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
 
   render () {
     const currentGroup = this.state.currentGroup
+    const groupCommits = this.state.groupCommits
 
     return (
       <div>
-        {currentGroup ? (
-          <div>
-            <h4>Group</h4>
+        <div>
+          {currentGroup ? (
             <div>
-              <label>
-                <strong>Full Name:</strong>
-              </label>{' '}
-              {currentGroup.full_name}
+              <h4>Group</h4>
+              <div>
+                <label>
+                  <strong>Full Name:</strong>
+                </label>{' '}
+                {currentGroup.full_name}
+              </div>
+              <div>
+                <label>
+                  <strong>Id:</strong>
+                </label>{' '}
+                {currentGroup.groupId}
+              </div>
+              <div>
+                <label>
+                  <strong>Description:</strong>
+                </label>{' '}
+                {currentGroup.description}
+              </div>
             </div>
+          ) : (
             <div>
-              <label>
-                <strong>Id:</strong>
-              </label>{' '}
-              {currentGroup.groupId}
+              <br />
+              <p>Please click on a Group...</p>
             </div>
+          )}
+        </div>
+        <div>
+          {groupCommits ? (
             <div>
-              <label>
-                <strong>Description:</strong>
-              </label>{' '}
-              {currentGroup.description}
+              <h4>Commits</h4>
+              <div>
+                <label>
+                  <strong>Project 1 id:</strong>
+                </label>{' '}
+                {groupCommits.data[0].projectId}
+              </div>
+              <div>
+                <label>
+                  <strong>Project 1 commit 1:</strong>
+                </label>{' '}
+                {groupCommits.data[0].commits[0].title}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Group...</p>
-          </div>
-        )}
+          ) : (
+            <div>
+              <br />
+              <p>Error: No commit data found...</p>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

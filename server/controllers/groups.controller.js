@@ -17,31 +17,15 @@ const TOKEN = process.env.GL_TOKEN
 
 const groupsController = {}
 
-// groupsController.getAll = (req, res) => {
-//   fetch(groupsUrl, {
-//     headers: { 'PRIVATE-TOKEN': process.env.GL_TOKEN }
-//   })
-//     .then(res => res.json())
-//     .then(allGroups => {
-//       const queryGroups = { data: [] }
-
-//       if (nameQuery) {
-//         allGroups.forEach((group) => {
-//           const name = group.full_name.toLowerCase()
-
-//           if (name.includes(nameQuery)) {
-//             const newJson = trimGroupJson(group)
-//             queryGroups.data.push(newJson)
-//           }
-//         })
-//       }
-//       const resJson = queryGroups.data[0] ? queryGroups : allGroups
-//       console.log(resJson)
-
-//       res.status(200).json(resJson)
-//     })
-// }
-
+/**
+ * Get all groups of a user by access level
+ * Handling GET requests to endpoint /groups/list
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @response success gives 200 OK with JSON body
+ *
+ */
 groupsController.list = (req, res) => {
   const nameValue = req.query.name
   const nameQuery = nameValue ? nameValue.toLowerCase() : null
@@ -77,6 +61,15 @@ groupsController.list = (req, res) => {
     })
 }
 
+/**
+ * Get one group of a user by id
+ * Handling GET requests to endpoint /groups/:id
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @response success gives 200 OK with JSON body
+ *
+ */
 groupsController.get = (req, res) => {
   const groupId = req.params.id
   const groupUrl = `${URL}/groups/${groupId}`
@@ -92,6 +85,15 @@ groupsController.get = (req, res) => {
     })
 }
 
+/**
+ * Get all commits for all projects of a group
+ * Handling GET requests to endpoint /groups/:id/commits
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @response success gives 200 OK with JSON body
+ *
+ */
 groupsController.getCommits = async (req, res) => {
   const groupId = req.params.id
   const projectsUrl = `${URL}/groups/${groupId}/projects`

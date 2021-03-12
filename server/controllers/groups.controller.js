@@ -127,11 +127,17 @@ groupsController.getCommits = async (req, res) => {
   res.status(200).json(commitsJson)
 }
 
-// can this be done mush neater with .map or something?
+/**
+ * Create a simple version of a GitLab group
+ *
+ * @param {Object} json a GitLab group json object
+ * @return {Object} newJson - simplified GitLab group object
+ *
+ */
 function trimGroupJson (json) {
   const newJson = {}
 
-  newJson.id = json.id
+  newJson.groupId = json.id
   newJson.full_name = json.full_name
   newJson.description = json.description
 

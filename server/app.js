@@ -16,7 +16,10 @@ import { routes } from './routes'
 const app = express()
 
 const corsOptions = {
-  origin: 'http://localhost:3000'
+  origin: [
+    'http://localhost:3000',
+    /\.gitlab\.lnu\.se$/
+  ]
 }
 
 const PORT = process.env.PORT || 8080

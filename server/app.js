@@ -38,8 +38,8 @@ app.use(bodyParser.json())
 app.use(logger('dev'))
 
 // routes
-app.use('/', routes.root)
-app.use('/groups', routes.groups)
+app.use('/api', routes.root)
+app.use('/api/groups', routes.groups)
 
 // Run Server
 app.listen(PORT, () => {

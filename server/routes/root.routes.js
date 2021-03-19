@@ -1,17 +1,17 @@
-/**
- * root routes
- *
- * @author Niall Thurrat
- * @version 1.0.0
- */
+// /**
+//  * root routes
+//  *
+//  * @author Niall Thurrat
+//  * @version 1.0.0
+//  */
 
-'use strict'
+// 'use strict'
 
-import express from 'express'
-import rootContoller from '../controllers/root.controller'
+// import express from 'express'
+// import rootContoller from '../controllers/root.controller'
 
-const rootRouter = express.Router()
+// const rootRouter = express.Router()
 
-rootRouter.get('/', rootContoller)
+// rootRouter.get('/', rootContoller)
 
-export default rootRouter
+// export default rootRouter

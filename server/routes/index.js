@@ -7,10 +7,12 @@
 
 'use strict'
 
-import rootRoutes from './root.routes'
+// import rootRoutes from './root.routes'
+import authRoutes from './auth.routes'
 import groupsRoutes from './groups.routes'
 
 export const routes = {}
 
-routes.root = rootRoutes
+// routes.root = rootRoutes
+routes.auth = authRoutes
 routes.groups = groupsRoutes

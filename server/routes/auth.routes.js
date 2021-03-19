@@ -8,11 +8,12 @@
 'use strict'
 
 import express from 'express'
-import authContoller from '../controllers/auth.controller'
+import signupContoller from '../controllers/auth/signup.controller'
+import loginContoller from '../controllers/auth/login.controller'
 
 const authRouter = express.Router()
 
-authRouter.post('/signup', authContoller.signup)
-authRouter.post('/login', authContoller.login)
+authRouter.post('/signup', signupContoller)
+authRouter.post('/login', loginContoller)
 
 export default authRouter

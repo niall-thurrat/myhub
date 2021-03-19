@@ -8,11 +8,12 @@
 'use strict'
 
 import express from 'express'
+import mongoose from './config/mongoose'
 import passport from 'passport'
 import passportConfig from './config/passport'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import mongoose from './config/mongoose'
+import createError from 'http-errors'
 import { routes } from './routes'
 const logger = require('morgan')
 
@@ -42,6 +43,22 @@ app.use(logger('dev'))
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username/groups', passport.authenticate(
   'jwt', { session: false }), routes.groups)
+
+// catch 404 errors
+app.use('*', (req, res, next) => next(createError(404)))
+
+// custom error handler
+app.use((error, req, res, next) => {
+  const data = {
+    status: error.status,
+    message: error.message
+  }
+  if (app.settings.env === 'development') {
+    data.stack = error.stack
+  }
+  res.status(error.status || 500)
+  res.json(data)
+})
 
 // run server
 app.listen(port, () => {

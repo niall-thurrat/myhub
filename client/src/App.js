@@ -4,8 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 import Home from './components/home.component'
-import SendToGitLab from './components/request-auth.component'
-import ReceiveFromGitLab from './components/auth-callback.component'
 import GroupsList from './components/groups-list.component'
 import Group from './components/group.component'
 
@@ -36,8 +34,6 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route exact path='/groups' component={GroupsList} />
             <Route path='/groups/:id' component={Group} />
-            <Route exact path='/login' component={SendToGitLab} />
-            <Route exact path='/auth/gitlab' component={ReceiveFromGitLab} />
           </Switch>
         </div>
       </div>

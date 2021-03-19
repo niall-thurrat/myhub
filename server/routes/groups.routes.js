@@ -15,8 +15,8 @@ import commitsContoller from '../controllers/groups/commits.controller'
 const groupsRouter = express.Router()
 
 // groupsRouter.get('/', groupsContoller.getAll)
-groupsRouter.get('/', groupsContoller)
-groupsRouter.get('/:id', groupContoller)
-groupsRouter.get('/:id/commits', commitsContoller)
+groupsRouter.get('/groups/', groupsContoller)
+groupsRouter.get('/groups/:id', groupContoller)
+groupsRouter.get('/groups/:id/commits', commitsContoller)
 
 export default groupsRouter

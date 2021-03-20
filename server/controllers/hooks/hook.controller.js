@@ -20,8 +20,10 @@
    * @response success gives 200 OK with JSON body
    *
    */
-export const hookController = async (req, res, next) => {
+const hookController = async (req, res, next) => {
   const resBody = req.body
   console.log('Im here')
   res.status(200).json(resBody)
 }
+
+export default hookController

@@ -10,6 +10,8 @@
 import express from 'express'
 import hookController from '../controllers/hooks/hook.controller'
 
-export const hookRouter = express.Router()
+const hookRouter = express.Router()
 
 hookRouter.post('/', hookController)
+
+export default hookRouter

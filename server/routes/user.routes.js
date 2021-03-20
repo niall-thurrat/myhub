@@ -14,7 +14,7 @@ import groupsController from '../controllers/groups/groups.controller'
 import groupController from '../controllers/groups/group.controller'
 import commitsController from '../controllers/groups/commits.controller'
 
-export const userRouter = express.Router()
+const userRouter = express.Router()
 
 userRouter.route('/')
   .get(userController.get)
@@ -24,3 +24,5 @@ userRouter.route('/')
 userRouter.get('/groups', groupsController)
 userRouter.get('/groups/:id', groupController)
 userRouter.get('/groups/:id/commits', commitsController)
+
+export default userRouter

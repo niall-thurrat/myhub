@@ -8,14 +8,7 @@
 'use strict'
 
 import User from '../../models/user.model'
-// import fetch from 'node-fetch'
-// import dotenv from 'dotenv'
 import createError from 'http-errors'
-
-// dotenv.config()
-
-// const URL = 'https://gitlab.lnu.se/api/v4/users/:gitlab-id'
-// const TOKEN = process.env.GL_TOKEN
 
 const userController = {}
 

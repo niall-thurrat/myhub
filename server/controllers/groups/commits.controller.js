@@ -8,12 +8,9 @@
 'use strict'
 
 import fetch from 'node-fetch'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import createError from 'http-errors'
 
 const URL = 'https://gitlab.lnu.se/api/v4'
-const TOKEN = process.env.GL_TOKEN
 
 /**
  * Get all commits for all projects of a group
@@ -27,18 +24,24 @@ const TOKEN = process.env.GL_TOKEN
  */
 const commitsController = async (req, res, next) => {
   try {
+    const token = req.user.gitlabToken
     const groupId = req.params.id
     const projectsUrl = `${URL}/groups/${groupId}/projects`
     const params = {
-      headers: { 'PRIVATE-TOKEN': TOKEN }
+      headers: { 'PRIVATE-TOKEN': token }
     }
     const commitsJson = { data: [] }
+
+    if (!token) {
+      return next(createError(401,
+        'No GitLab private token set for user'))
+    }
 
     const ids = await fetch(projectsUrl, params)
       .then(res => res.json())
       .then(projects => projects.map(p => p.id))
 
-    // HANDLE HOW MANY COMMITS YOU WANT HERE - CURRENTLY GETTING 20 MAX PER PROJECT DUE TO PAGINATION
+    // TODO HANDLE HOW MANY COMMITS YOU WANT HERE - CURRENTLY GETTING 20 MAX PER PROJECT DUE TO PAGINATION
     const requests = ids.map(id => fetch(
         `${URL}/projects/${id}/repository/commits`, params
     ))

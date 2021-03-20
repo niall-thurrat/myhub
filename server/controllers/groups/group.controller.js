@@ -9,13 +9,9 @@
 
 import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
-import dotenv from 'dotenv'
 import createError from 'http-errors'
 
-dotenv.config()
-
 const URL = 'https://gitlab.lnu.se/api/v4'
-const TOKEN = process.env.GL_TOKEN
 
 /**
  * Get one group of a user by id
@@ -30,9 +26,15 @@ const TOKEN = process.env.GL_TOKEN
 const groupController = (req, res, next) => {
   const groupId = req.params.id
   const groupUrl = `${URL}/groups/${groupId}`
+  const token = req.user.gitlabToken
+
+  if (!token) {
+    return next(createError(401,
+      'No GitLab private token set for user'))
+  }
 
   fetch(groupUrl, {
-    headers: { 'PRIVATE-TOKEN': TOKEN }
+    headers: { 'PRIVATE-TOKEN': token }
   })
     .then(res => res.json())
     .then(groupJson => {

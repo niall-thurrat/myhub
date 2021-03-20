@@ -10,7 +10,7 @@
 import User from '../../models/user.model'
 // import fetch from 'node-fetch'
 // import dotenv from 'dotenv'
-// import createError from 'http-errors'
+import createError from 'http-errors'
 
 // dotenv.config()
 
@@ -43,7 +43,7 @@ userController.get = async (req, res, next) => {
 }
 
 /**
-  * Edit user
+  * Edit user (only gitlabId + token at present)
   * Handling POST requests to endpoint /api/users/:username
   *
   * @param {Object} req
@@ -52,14 +52,43 @@ userController.get = async (req, res, next) => {
   * @response success gives 200 OK with JSON body
   *
   */
-userController.edit = (req, res, next) => { // THIS FUNC WILL ONLY HAVE MYHUB REGISTRATION DATA UNITL THE GITLAB ID AND TOKEN ARE ENTERED
-  // update gitlab id + token (instance might be good here too)
-  // password, username, email edit should be handled here too
-  const resBody = {
-    user: 'no change'
-  }
+userController.edit = (req, res, next) => {
+  try {
+    const username = req.user.username
+    const token = req.body.gitlabToken
 
-  res.status(200).json(resBody)
+    // update token for future GitLab API requests
+    if (token) {
+      req.user.gitlabToken = token
+    }
+
+    const editData = {
+      gitlabToken: token
+    }
+
+    for (const key in editData) {
+      if (editData[key] === undefined) {
+        delete editData[key]
+      }
+    }
+
+    User.findOneAndUpdate({ username: username }, { $set: editData },
+      { new: true }, (err, user) => {
+        if (err) {
+          return next(createError(404,
+            'error finding user', err
+          ))
+        }
+        const resBody = {
+          edit_success: true,
+          description: 'updated user data held by myHub '
+        }
+
+        res.status(200).json(resBody)
+      })
+  } catch (error) {
+    next(error)
+  }
 }
 
 export default userController

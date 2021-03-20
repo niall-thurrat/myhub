@@ -21,7 +21,6 @@ import createError from 'http-errors'
   *
   */
 const signupController = async (req, res, next) => {
-  console.log('FIRING: authController.signup')
   try {
     const user = await User.findOne({
       username: req.body.username

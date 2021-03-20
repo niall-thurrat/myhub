@@ -38,6 +38,16 @@ const userSchema = mongoose.Schema({
     type: String,
     required: false,
     trim: true
+  },
+  gitlabId: {
+    type: Number,
+    required: false,
+    trim: true
+  },
+  gitlabToken: {
+    type: String,
+    required: false,
+    trim: true
   }
 }, { timestamps: true })
 

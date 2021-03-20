@@ -18,7 +18,7 @@ const userRouter = express.Router()
 
 userRouter.route('/')
   .get(userController.get)
-  .post(userController.edit)
+  .patch(userController.edit)
 
 // userRouter.get('/', groupsContoller.getAll)
 userRouter.get('/groups', groupsController)

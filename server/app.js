@@ -42,7 +42,7 @@ app.use(logger('dev'))
 // app.use('/api', routes.root)
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', passport.authenticate(
-  'jwt', { session: false }), routes.groups)
+  'jwt', { session: false }), routes.user)
 
 // catch 404 errors
 app.use('*', (req, res, next) => next(createError(404)))

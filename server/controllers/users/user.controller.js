@@ -7,14 +7,15 @@
 
 'use strict'
 
-import fetch from 'node-fetch'
-import dotenv from 'dotenv'
-import createError from 'http-errors'
+import User from '../../models/user.model'
+// import fetch from 'node-fetch'
+// import dotenv from 'dotenv'
+// import createError from 'http-errors'
 
-dotenv.config()
+// dotenv.config()
 
-const URL = 'https://gitlab.lnu.se/api/v4/users/:gitlab-id'
-const TOKEN = process.env.GL_TOKEN
+// const URL = 'https://gitlab.lnu.se/api/v4/users/:gitlab-id'
+// const TOKEN = process.env.GL_TOKEN
 
 const userController = {}
 
@@ -28,14 +29,21 @@ const userController = {}
   * @response success gives 200 OK with JSON body
   *
   */
-userController.get = (req, res, next) => {
-  // return user model data
-  // THIS FUNC WILL ONLY HAVE MYHUB REGISTRATION DATA UNITL THE GITLAB ID AND TOKEN ARE ENTERED
+userController.get = async (req, res, next) => {
+  const username = req.user.username
+  const user = await User.findOne({ username })
+    .select('-password')
 
+  const resBody = {
+    user: user,
+    description: 'user data held by myHub '
+  }
+
+  res.status(200).json(resBody)
 }
 
 /**
-  * Get user
+  * Edit user
   * Handling POST requests to endpoint /api/users/:username
   *
   * @param {Object} req
@@ -44,9 +52,14 @@ userController.get = (req, res, next) => {
   * @response success gives 200 OK with JSON body
   *
   */
-userController.post = (req, res, next) => { // THIS FUNC WILL ONLY HAVE MYHUB REGISTRATION DATA UNITL THE GITLAB ID AND TOKEN ARE ENTERED
+userController.edit = (req, res, next) => { // THIS FUNC WILL ONLY HAVE MYHUB REGISTRATION DATA UNITL THE GITLAB ID AND TOKEN ARE ENTERED
   // update gitlab id + token (instance might be good here too)
   // password, username, email edit should be handled here too
+  const resBody = {
+    user: 'no change'
+  }
+
+  res.status(200).json(resBody)
 }
 
 export default userController

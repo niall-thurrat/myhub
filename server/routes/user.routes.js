@@ -8,12 +8,21 @@
 'use strict'
 
 import express from 'express'
+
 import userController from '../controllers/users/user.controller'
+import groupsController from '../controllers/groups/groups.controller'
+import groupController from '../controllers/groups/group.controller'
+import commitsController from '../controllers/groups/commits.controller'
 
-const router = express.Router()
+const userRouter = express.Router()
 
-router.route('/')
+userRouter.route('/')
   .get(userController.get)
   .post(userController.edit)
 
-export default router
+// userRouter.get('/', groupsContoller.getAll)
+userRouter.get('/groups', groupsController)
+userRouter.get('/groups/:id', groupController)
+userRouter.get('/groups/:id/commits', commitsController)
+
+export default userRouter

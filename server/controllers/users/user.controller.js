@@ -65,8 +65,8 @@ userController.edit = (req, res, next) => {
       }
     }
 
-    User.findOneAndUpdate({ username: username }, { $set: editData },
-      { new: true }, (err, user) => {
+    User.findOneAndUpdate({ username: username },
+      { $set: editData }, { new: true }, (err, user) => {
         if (err) {
           return next(createError(404,
             'error finding user', err

@@ -30,7 +30,7 @@ mongoose.run().catch(error => {
   process.exit(1)
 })
 
-// middleware
+// additional middleware
 app.use(cors(corsOptions))
 app.use(passport.initialize())
 passportConfig(passport)
@@ -43,6 +43,7 @@ app.use(logger('dev'))
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', passport.authenticate(
   'jwt', { session: false }), routes.user)
+app.use('/api/hooks', routes.hook)
 
 // catch 404 errors
 app.use('*', (req, res, next) => next(createError(404)))

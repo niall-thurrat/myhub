@@ -8,6 +8,8 @@
 'use strict'
 
 import express from 'express'
+import { createServer } from 'http'
+// import { Server } from 'socket.io'
 import mongoose from './config/mongoose'
 import passport from 'passport'
 import passportConfig from './config/passport'
@@ -18,7 +20,10 @@ import { routes } from './routes'
 const logger = require('morgan')
 
 const app = express()
+const httpServer = createServer(app)
+// const io = new Server(httpServer)
 const port = process.env.PORT || 8080
+
 const corsOptions = {
   origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
@@ -62,6 +67,6 @@ app.use((error, req, res, next) => {
 })
 
 // run server
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}.`)
 })

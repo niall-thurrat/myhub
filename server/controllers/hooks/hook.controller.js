@@ -7,7 +7,6 @@
 
 'use strict'
 
-// import User from '../../models/user.model'
 import createError from 'http-errors'
 
 /**

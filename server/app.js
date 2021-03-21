@@ -9,7 +9,7 @@
 
 import express from 'express'
 import { createServer } from 'http'
-// import { Server } from 'socket.io'
+import { Server } from 'socket.io'
 import mongoose from './config/mongoose'
 import passport from 'passport'
 import passportConfig from './config/passport'
@@ -17,23 +17,26 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import createError from 'http-errors'
 import { routes } from './routes'
+import { EventEmitter } from 'events'
 const logger = require('morgan')
 
 const app = express()
 const httpServer = createServer(app)
-// const io = new Server(httpServer)
+const io = new Server(httpServer)
 const port = process.env.PORT || 8080
-
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
-}
 
 // connect to mongoDB via mongoose
 mongoose.run().catch(error => {
   console.error(error)
   process.exit(1)
 })
+
+const emitter = new EventEmitter()
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+}
 
 // additional middleware
 app.use(cors(corsOptions))
@@ -49,6 +52,21 @@ app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', passport.authenticate(
   'jwt', { session: false }), routes.user)
 app.use('/api/hooks', routes.hook)
+
+app.post('/', function (req, res) {
+  emitter.emit('releaseHook', req.body)
+})
+
+io.on('connection', socket => {
+  emitter.on('releaseHook', function (data) {
+    const releaseObj = {
+      id: data.id,
+      description: data.description,
+      name: data.name
+    }
+    socket.emit('releaseData', releaseObj)
+  })
+})
 
 // catch 404 errors
 app.use('*', (req, res, next) => next(createError(404)))

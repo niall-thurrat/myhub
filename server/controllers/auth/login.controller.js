@@ -45,7 +45,7 @@ const loginController = async (req, res, next) => {
           emailAddress: user.emailAddress
         }
 
-        jwt.sign(payload, process.env.AUTH_SECRET,
+        jwt.sign(payload, process.env.JWT_SECRET,
           { expiresIn: 7200 }, (err, token) => {
             if (err) {
               return next(createError(500,

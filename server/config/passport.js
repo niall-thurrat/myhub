@@ -12,7 +12,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const secret = process.env.AUTH_SECRET || 'some other secret as default'
+const secret = process.env.JWT_SECRET
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -29,7 +29,7 @@ export default passport => {
               id: user.id,
               name: user.name,
               username: user.username,
-              emailAddress: user.emailAddress,
+              email: user.email,
               gitlabToken: user.gitlabToken
             })
           }

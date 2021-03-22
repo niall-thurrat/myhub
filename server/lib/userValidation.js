@@ -14,14 +14,14 @@ export default {
     }
     return false
   },
-  isLongEnoughPassword: function (input) {
-    if (input.length >= 8) {
+  isCorrectLengthPassword: function (input) {
+    if (input.length >= 8 && input.length <= 40) {
       return true
     }
     return false
   },
   isCorrectLengthUsername: function (input) {
-    if (input.length >= 6 && input.length <= 12) {
+    if (input.length >= 6 && input.length <= 20) {
       return true
     }
     return false

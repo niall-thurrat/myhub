@@ -14,13 +14,14 @@ const userSchema = mongoose.Schema({
     unique: true,
     trim: true,
     minlength: 6,
-    maxlength: 12
+    maxlength: 20
   },
   password: {
     type: String,
     required: true,
     trim: false,
-    minlength: 8
+    minlength: 8,
+    maxlength: 40
   },
   name: {
     type: String,
@@ -29,9 +30,9 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 100
   },
-  emailAddress: {
+  email: {
     type: String,
-    required: false,
+    required: true,
     trim: true
   },
   gitlabToken: {
@@ -42,7 +43,8 @@ const userSchema = mongoose.Schema({
 }, { timestamps: true })
 
 userSchema.path('password').validate(function (input) {
-  return validate.isGoodPassword(input) && validate.isLongEnoughPassword(input)
+  return validate.isGoodPassword(input) &&
+    validate.isCorrectLengthPassword(input)
 })
 
 // using pre-hook to salt and hash password
@@ -71,7 +73,7 @@ userSchema.path('name').validate(function (input) {
   return validate.isSafe(input)
 }, "You Cannot use the '$' Character")
 
-userSchema.path('emailAddress').validate(function (input) {
+userSchema.path('email').validate(function (input) {
   return validate.isSafe(input)
 }, "You Cannot use the '$' Character")
 

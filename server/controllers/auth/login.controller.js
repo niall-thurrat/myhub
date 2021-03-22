@@ -37,7 +37,7 @@ const loginController = async (req, res, next) => {
           id: user._id,
           name: user.name,
           username: user.username,
-          emailAddress: user.emailAddress
+          email: user.email
         }
 
         jwt.sign(payload, process.env.JWT_SECRET,
@@ -54,9 +54,10 @@ const loginController = async (req, res, next) => {
             const resBody = {
               login_success: true,
               token: `Bearer ${token}`,
-              logged_in_user: {
+              user: {
                 id: user._id,
-                username: user.username
+                username: user.username,
+                email: user.email
               },
               description: 'use Bearer token in Authorization ' +
                'header to access user and group resources'

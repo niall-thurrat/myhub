@@ -29,7 +29,7 @@ const signupController = async (req, res, next) => {
       const newUser = new User({
         name: req.body.name,
         username: req.body.username,
-        emailAddress: req.body.emailAddress,
+        email: req.body.email,
         password: req.body.password
       })
 

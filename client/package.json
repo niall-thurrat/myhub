@@ -40,6 +40,10 @@
     ]
   },
   "standard": {
-    "globals": [ "localStorage", "test", "expect" ]
+    "globals": [
+      "localStorage",
+      "test",
+      "expect"
+    ]
   }
 }

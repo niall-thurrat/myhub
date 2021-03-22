@@ -5,8 +5,6 @@
 //  * @version 1.0.0
 //  */
 
-// 'use strict'
-
 // /**
 //  * Get root of myHub API
 //  * Handling GET requests to endpoint /

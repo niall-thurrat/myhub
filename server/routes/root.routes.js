@@ -5,8 +5,6 @@
 //  * @version 1.0.0
 //  */
 
-// 'use strict'
-
 // import express from 'express'
 // import rootContoller from '../controllers/root.controller'
 

@@ -5,8 +5,6 @@
  * @version 1.0.0
  */
 
-'use strict'
-
 import fetch from 'node-fetch'
 import createError from 'http-errors'
 

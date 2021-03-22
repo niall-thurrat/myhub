@@ -5,8 +5,6 @@
  * @version 1.0.0
  */
 
-'use strict'
-
 import createError from 'http-errors'
 
 /**

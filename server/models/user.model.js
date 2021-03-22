@@ -6,8 +6,6 @@
  *
  */
 
-'use strict'
-
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import validate from '../lib/userValidation'

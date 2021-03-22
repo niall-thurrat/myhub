@@ -5,8 +5,6 @@
  * @version 1.0.0
  */
 
-'use strict'
-
 /**
  * Create a simple version of a GitLab group
  *

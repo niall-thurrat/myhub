@@ -8,7 +8,6 @@
  * https://medium.com/@therealchrisrutherford/nodejs-authentication-with-passport-and-jwt-in-express-3820e256054f
  */
 
-'use strict'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 import User from '../models/user.model'
 import dotenv from 'dotenv'

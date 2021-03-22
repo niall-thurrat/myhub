@@ -9,8 +9,6 @@
  *
  */
 
-'use strict'
-
 export default {
   isAlphaNumericOnly: function (input) {
     var letterNumberRegex = /^[0-9a-zA-Z]+$/

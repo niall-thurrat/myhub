@@ -5,8 +5,6 @@
  * @version 1.0.0
  */
 
-'use strict'
-
 import express from 'express'
 
 import userController from '../controllers/users/user.controller'

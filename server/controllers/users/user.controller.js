@@ -5,8 +5,6 @@
  * @version 1.0.0
  */
 
-'use strict'
-
 import User from '../../models/user.model'
 import createError from 'http-errors'
 

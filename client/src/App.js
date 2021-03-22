@@ -5,47 +5,105 @@
  * https://bezkoder.com/react-crud-web-api/
  */
 
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
+import AuthService from './services/auth.service'
+
+import Login from './components/login.component'
+import Signup from './components/signup.component'
 import Home from './components/home.component'
+import Profile from './components/profile.component'
+import BoardUser from './components/board-user.component'
 import GroupsList from './components/groups-list.component'
 import Group from './components/group.component'
 
-class App extends Component {
-  render () {
-    return (
-      <div>
-        <nav className='navbar navbar-expand navbar-dark bg-dark'>
-          <a href='/' className='navbar-brand'>
-            home
-          </a>
-          <div className='navbar-nav mr-auto'>
+const App = () => {
+  const [currentUser, setCurrentUser] = useState(undefined)
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+    }
+  }, [])
+
+  const logOut = () => {
+    AuthService.logout()
+    setCurrentUser(undefined)
+  }
+
+  return (
+    <div>
+      <nav className='navbar navbar-expand navbar-dark bg-dark'>
+        <Link to='/' className='navbar-brand'>
+          myHub
+        </Link>
+        <div className='navbar-nav mr-auto'>
+          <li className='nav-item'>
+            <Link to='/groups' className='nav-link'>
+              Groups
+            </Link>
+          </li>
+
+          {currentUser && (
             <li className='nav-item'>
-              <Link to='/groups' className='nav-link'>
-                my groups
+              <Link to='/user' className='nav-link'>
+                User Board
+              </Link>
+            </li>
+          )}
+        </div>
+
+        {currentUser ? (
+          <div className='navbar-nav ml-auto'>
+            <li className='nav-item'>
+              <Link to='/profile' className='nav-link'>
+                {currentUser.username}
               </Link>
             </li>
             <li className='nav-item'>
-              <Link to='/login' className='nav-link'>
-                login
+              {/* <a href='/logout' className='nav-link' onClick={logOut}>
+                LogOut
+              </a> */}
+              <Link to='/' className='nav-link' onClick={logOut}>
+              LogOut
               </Link>
             </li>
           </div>
-        </nav>
+        ) : (
+          <div className='navbar-nav ml-auto'>
+            <li className='nav-item'>
+              <Link to='/login' className='nav-link'>
+                Login
+              </Link>
+            </li>
 
-        <div className='container mt-3'>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/groups' component={GroupsList} />
-            <Route path='/groups/:id' component={Group} />
-          </Switch>
-        </div>
+            <li className='nav-item'>
+              <Link to='/signup' className='nav-link'>
+                Sign Up
+              </Link>
+            </li>
+          </div>
+        )}
+      </nav>
+
+      <div className='container mt-3'>
+        <Switch>
+          <Route exact path={['/', '/home']} component={Home} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/signup' component={Signup} />
+          <Route exact path='/profile' component={Profile} />
+          <Route path='/user' component={BoardUser} />
+          <Route exact path='/groups' component={GroupsList} />
+          <Route path='/groups/:id' component={Group} />
+        </Switch>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default App

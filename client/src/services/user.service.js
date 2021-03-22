@@ -8,18 +8,13 @@
 
 import http from '../http-common'
 import authHeader from './auth-header'
-import username from './extract-username'
-
-const getPublicContent = () => { // what is this - needed??
-  return http.get('all')
-}
+import username from './username'
 
 const getUserBoard = () => {
-  return http.get(`/api/user/${username()}`,
+  return http.get(`/users/${username()}`,
     { headers: authHeader() })
 }
 
 export default {
-  getPublicContent,
   getUserBoard
 }

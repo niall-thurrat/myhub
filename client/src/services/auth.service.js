@@ -8,7 +8,7 @@
 
 import http from '../http-common'
 
-const register = (username, email, password) => {
+const signup = (username, email, password) => {
   return http.post('/auth/signup', {
     username,
     email,
@@ -22,12 +22,20 @@ const login = (username, password) => {
     password
   })
     .then((response) => {
-      if (response.accessToken) {
+      const user = response.data.user
+      const token = response.data.token
+
+      if (user) {
+        const storageUser = {
+          username: user.username,
+          accessToken: token
+        }
+
         localStorage.setItem('user',
-          JSON.stringify(response.data))
+          JSON.stringify(storageUser))
       }
 
-      return response.data
+      return user
     })
 }
 
@@ -35,13 +43,13 @@ const logout = () => {
   localStorage.removeItem('user')
 }
 
-const getCurrentUser = () => {
+const getCurrentUser = () => { // bit muddled here - this is getting user details from local storage. Get from API instead.
   return JSON.parse(
     localStorage.getItem('user'))
 }
 
 export default {
-  register,
+  signup,
   login,
   logout,
   getCurrentUser

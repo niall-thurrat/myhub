@@ -1,3 +1,11 @@
+/**
+ * Groups-list services
+ *
+ * @author Niall Thurrat
+ * @credits Got help from bezkoder for this one:
+ * https://bezkoder.com/react-crud-web-api/
+ */
+
 import http from '../http-common'
 
 class GroupsListDataService {

@@ -1,3 +1,11 @@
+/**
+ * GroupsList component
+ *
+ * @author Niall Thurrat
+ * @credits Got help from bezkoder for this one:
+ * https://bezkoder.com/react-crud-web-api/
+ */
+
 import React, { Component } from 'react'
 import GroupsListDataService from '../services/groups-list.service'
 import { Link } from 'react-router-dom'

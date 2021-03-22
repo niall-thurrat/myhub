@@ -1,3 +1,8 @@
+/**
+ * Home component
+ * @author Niall Thurrat
+ */
+
 import React, { Component } from 'react'
 
 export default class Home extends Component {

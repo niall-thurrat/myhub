@@ -1,3 +1,8 @@
+/**
+ * Username extractor (from JWT in local storage)
+ * @author Niall Thurrat
+ */
+
 import jwt from 'jsonwebtoken'
 
 const SECRET = process.env.REACT_APP_JWT_SECRET

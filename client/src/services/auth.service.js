@@ -1,16 +1,40 @@
 import http from '../http-common'
 
-class AuthService {
-  login () {
-    return http.get('/auth/login/success', {
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': true
-      }
-    })
-  }
+const register = (username, email, password) => {
+  return http.post('/auth/signup', {
+    username,
+    email,
+    password
+  })
 }
 
-export default new AuthService()
+const login = (username, password) => {
+  return http.post('/auth/login', {
+    username,
+    password
+  })
+    .then((response) => {
+      if (response.accessToken) {
+        localStorage.setItem('user',
+          JSON.stringify(response.data))
+      }
+
+      return response.data
+    })
+}
+
+const logout = () => {
+  localStorage.removeItem('user')
+}
+
+const getCurrentUser = () => {
+  return JSON.parse(
+    localStorage.getItem('user'))
+}
+
+export default {
+  register,
+  login,
+  logout,
+  getCurrentUser
+}

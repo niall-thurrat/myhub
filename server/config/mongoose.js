@@ -1,8 +1,6 @@
 /**
- * Mongoose configuration.
- *
+ * Mongoose configuration
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 'use strict'

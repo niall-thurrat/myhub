@@ -1,8 +1,6 @@
 // /**
 //  * Root controller
-//  *
 //  * @author Niall Thurrat
-//  * @version 1.0.0
 //  */
 
 // /**

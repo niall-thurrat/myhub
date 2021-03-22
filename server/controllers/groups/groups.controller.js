@@ -1,8 +1,6 @@
 /**
  * User gitlab groups controller
- *
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 import fetch from 'node-fetch'

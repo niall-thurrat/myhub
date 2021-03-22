@@ -1,8 +1,6 @@
 // /**
 //  * root routes
-//  *
 //  * @author Niall Thurrat
-//  * @version 1.0.0
 //  */
 
 // import express from 'express'

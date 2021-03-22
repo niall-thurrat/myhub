@@ -2,11 +2,8 @@
  * user credentials validation utility
  *
  * @author Niall Thurrat
- * @version 1.0.0
- *
  * @credits got a lot of help from jonnie.io for this module. Tutorial found at:
  * http://jonnie.io/blog/node/rest/express/2014/07/19/Node-Restful-Api-part-2.html
- *
  */
 
 export default {

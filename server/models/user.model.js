@@ -1,9 +1,6 @@
 /**
  * user model
- *
  * @author Niall Thurrat
- * @version 1.0.0
- *
  */
 
 import mongoose from 'mongoose'

@@ -1,8 +1,6 @@
 /**
  * Routes index
- *
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 // import rootRoutes from './root.routes'

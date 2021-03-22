@@ -1,8 +1,6 @@
 /**
  * User controller
- *
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 import User from '../../models/user.model'

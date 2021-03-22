@@ -1,8 +1,6 @@
 /**
  * Webhooks controller
- *
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 import createError from 'http-errors'

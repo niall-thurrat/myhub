@@ -1,8 +1,6 @@
 /**
  * The starting point of myHub server application.
- *
  * @author Niall Thurrat
- * @version 1.0.0
  */
 
 import express from 'express'

@@ -1,10 +1,8 @@
 /**
- * Passport configuration.
+ * Passport configuration
  *
  * @author Niall Thurrat
- * @version 1.0.0
- *
- *  * @credits got a bit of help from Chris Rutherford on this one:
+ * @credits got a bit of help from Chris Rutherford on this one:
  * https://medium.com/@therealchrisrutherford/nodejs-authentication-with-passport-and-jwt-in-express-3820e256054f
  */
 

@@ -1,5 +1,6 @@
 /**
  * App component of myHub client app
+ *
  * @author Niall Thurrat
  * @credits Got help from bezkoder for this one:
  * https://bezkoder.com/react-crud-web-api/
@@ -15,7 +16,7 @@ import AuthService from './services/auth.service'
 import Login from './components/login.component'
 import Signup from './components/signup.component'
 import Home from './components/home.component'
-import Profile from './components/profile.component'
+import UserPage from './components/user/user-page.component'
 import BoardUser from './components/board-user.component'
 import GroupsList from './components/groups-list.component'
 import Group from './components/group.component'
@@ -61,14 +62,11 @@ const App = () => {
         {currentUser ? (
           <div className='navbar-nav ml-auto'>
             <li className='nav-item'>
-              <Link to='/profile' className='nav-link'>
+              <Link to='/user' className='nav-link'>
                 {currentUser.username}
               </Link>
             </li>
             <li className='nav-item'>
-              {/* <a href='/logout' className='nav-link' onClick={logOut}>
-                LogOut
-              </a> */}
               <Link to='/' className='nav-link' onClick={logOut}>
               LogOut
               </Link>
@@ -96,7 +94,7 @@ const App = () => {
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
-          <Route exact path='/profile' component={Profile} />
+          <Route exact path='/user' component={UserPage} />
           <Route path='/user' component={BoardUser} />
           <Route exact path='/groups' component={GroupsList} />
           <Route path='/groups/:id' component={Group} />

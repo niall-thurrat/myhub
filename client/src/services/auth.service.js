@@ -17,6 +17,7 @@ const signup = (username, email, password) => {
 }
 
 const login = (username, password) => {
+  console.log('OK HERE')
   return http.post('/auth/login', {
     username,
     password
@@ -27,7 +28,10 @@ const login = (username, password) => {
 
       if (user) {
         const storageUser = {
+          _id: user._id,
           username: user.username,
+          email: user.email,
+          name: user.name,
           accessToken: token
         }
 
@@ -43,11 +47,12 @@ const logout = () => {
   localStorage.removeItem('user')
 }
 
-const getCurrentUser = () => { // bit muddled here - this is getting user details from local storage. Get from API instead.
+const getCurrentUser = () => {
   return JSON.parse(
     localStorage.getItem('user'))
 }
 
+// eslint-disable-next-line
 export default {
   signup,
   login,

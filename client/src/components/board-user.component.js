@@ -7,16 +7,15 @@
  */
 
 import React, { useState, useEffect } from 'react'
-
 import UserService from '../services/user.service'
 
 const BoardUser = () => {
   const [content, setContent] = useState('')
 
   useEffect(() => {
-    UserService.getUserBoard().then(
+    UserService.getUser().then(
       (response) => {
-        setContent(response.data) // .user ???????????????????????????????????????????????????
+        setContent(response.data) // CONVERT THIS MODULE TO THE GROUP-SELECTER WHICH WILL CONTAIN GROUP-SEARCH, GROUP-LIST AND SELECTED-GROUP COMPS
       },
       (error) => {
         const _content =

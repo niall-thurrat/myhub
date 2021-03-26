@@ -10,11 +10,12 @@ import http from '../http-common'
 import authHeader from './auth-header'
 import username from './username'
 
-const getUserBoard = () => {
+const getUser = () => {
   return http.get(`/users/${username()}`,
     { headers: authHeader() })
 }
 
+// eslint-disable-next-line
 export default {
-  getUserBoard
+  getUser
 }

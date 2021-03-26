@@ -23,6 +23,11 @@ const userSchema = mongoose.Schema({
     minlength: 8,
     maxlength: 40
   },
+  email: {
+    type: String,
+    required: true,
+    trim: true
+  },
   name: {
     type: String,
     required: false,
@@ -30,9 +35,20 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 100
   },
-  email: {
+  gitlabUsername: {
     type: String,
-    required: true,
+    required: false,
+    unique: true,
+    trim: true
+  },
+  gitlabInstanceUrl: {
+    type: String,
+    required: false,
+    trim: true
+  },
+  gitlabId: {
+    type: Number,
+    required: false,
     trim: true
   },
   gitlabToken: {

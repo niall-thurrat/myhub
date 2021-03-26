@@ -35,7 +35,6 @@ const loginController = async (req, res, next) => {
       if (isMatch) {
         const payload = {
           id: user._id,
-          name: user.name,
           username: user.username,
           email: user.email
         }
@@ -47,23 +46,28 @@ const loginController = async (req, res, next) => {
                 'Error signing JWT'))
             }
 
-            res.status(200)
-            res.setHeader('Content-Type', 'application/json')
-            res.charset = 'utf-8'
-
+            // TODO add method to show all properties in user except password
             const resBody = {
               login_success: true,
               token: `Bearer ${token}`,
               user: {
-                id: user._id,
+                _id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                name: user.name,
+                gitlabUsername: user.gitlabUsername,
+                gitlabToken: user.gitlabToken,
+                gitlabInstanceUrl: user.gitlabInstanceUrl,
+                gitlabId: user.gitlabId
               },
               description: 'use Bearer token in Authorization ' +
                'header to access user and group resources'
             }
 
-            res.send(JSON.stringify(resBody))
+            res.setHeader('Content-Type', 'application/json')
+            res.charset = 'utf-8'
+
+            res.status(200).json(resBody)
           })
       } else {
         return next(createError(401,

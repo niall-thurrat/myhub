@@ -37,7 +37,6 @@ const signupController = async (req, res, next) => {
         if (err) {
           return next(createError(400, err))
         } else {
-          res.status(201)
           res.setHeader('Content-Type', 'application/json')
           res.charset = 'utf-8'
           res.setHeader('Location',
@@ -48,7 +47,7 @@ const signupController = async (req, res, next) => {
             description: 'login required after signup.'
           }
 
-          res.send(JSON.stringify(resBody))
+          res.status(201).json(resBody)
         }
       })
     }

@@ -43,16 +43,20 @@ userController.get = async (req, res, next) => {
   */
 userController.edit = (req, res, next) => {
   try {
+    // TODO email and name should be changeable
+    // TODO password change must be managed
     const username = req.user.username
     const token = req.body.gitlabToken
+    const url = req.body.gitlabInstanceUrl
+    const id = req.body.gitlabId
 
-    // update token for future GitLab API requests
-    if (token) {
-      req.user.gitlabToken = token
-    }
+    // updates token for future GitLab API requests
+    if (token) req.user.gitlabToken = token
 
     const editData = {
-      gitlabToken: token
+      gitlabToken: token,
+      gitlabInstanceUrl: url,
+      gitlabId: id
     }
 
     for (const key in editData) {
@@ -67,7 +71,7 @@ userController.edit = (req, res, next) => {
           return next(createError(404,
             'error finding user', err
           ))
-        }
+        } // TODO handle if no data changes
         const resBody = {
           edit_success: true,
           description: 'updated user data held by myHub '

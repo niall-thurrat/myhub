@@ -7,22 +7,25 @@
  */
 
 import http from '../http-common'
+import username from './username'
+
+const userUrl = `/users/${username()}`
 
 class GroupsListDataService {
   getAll () {
-    return http.get('/groups/list')
+    return http.get(`${userUrl}/groups`)
   }
 
   get (id) {
-    return http.get(`/groups/${id}`)
+    return http.get(`${userUrl}/groups/${id}`)
   }
 
   findByName (name) {
-    return http.get(`/groups/list?name=${name}`)
+    return http.get(`${userUrl}/groups?name=${name}`)
   }
 
   getCommits (id) {
-    return http.get(`/groups/${id}/commits`)
+    return http.get(`${userUrl}/groups/${id}/commits`)
   }
 }
 

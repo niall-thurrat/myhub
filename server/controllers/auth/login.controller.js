@@ -55,7 +55,6 @@ const loginController = async (req, res, next) => {
                 username: user.username,
                 email: user.email,
                 name: user.name,
-                gitlabUsername: user.gitlabUsername,
                 gitlabToken: user.gitlabToken,
                 gitlabInstanceUrl: user.gitlabInstanceUrl,
                 gitlabId: user.gitlabId

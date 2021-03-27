@@ -35,11 +35,6 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 100
   },
-  gitlabUsername: {
-    type: String,
-    required: false,
-    trim: true
-  },
   gitlabInstanceUrl: {
     type: String,
     required: false,

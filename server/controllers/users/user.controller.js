@@ -43,9 +43,10 @@ userController.get = async (req, res, next) => {
   */
 userController.edit = (req, res, next) => {
   try {
-    // TODO email and name should be changeable
     // TODO password change must be managed
     const username = req.user.username
+    const name = req.user.username
+    const email = req.user.email
     const token = req.body.gitlabToken
     const url = req.body.gitlabInstanceUrl
     const id = req.body.gitlabId
@@ -54,6 +55,8 @@ userController.edit = (req, res, next) => {
     if (token) req.user.gitlabToken = token
 
     const editData = {
+      name: name,
+      email: email,
       gitlabToken: token,
       gitlabInstanceUrl: url,
       gitlabId: id

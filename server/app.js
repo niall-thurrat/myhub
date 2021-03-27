@@ -47,19 +47,21 @@ app.use(logger('dev'))
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', passport.authenticate(
   'jwt', { session: false }), routes.user)
-app.use('/api/hooks', routes.hook)
+// app.use('/api/hooks', routes.hook)
 
-app.post('/', function (req, res) {
+app.post('/api/hooks', function (req, res) {
   emitter.emit('releaseHook', req.body)
 })
 
 io.on('connection', socket => {
   emitter.on('releaseHook', function (data) {
+    console.log('emitter firing')
     const releaseObj = {
       id: data.id,
       description: data.description,
       name: data.name
     }
+    console.log(releaseObj)
     socket.emit('releaseData', releaseObj)
   })
 })

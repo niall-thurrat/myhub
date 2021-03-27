@@ -12,7 +12,7 @@ import Input from 'react-validation/build/input'
 import CheckButton from 'react-validation/build/button'
 import { isEmail } from 'validator'
 
-import AuthService from '../services/auth.service'
+import AuthService from '../../services/auth.service'
 
 const required = (value) => {
   if (!value) {
@@ -94,7 +94,7 @@ const Signup = (props) => {
       AuthService.signup(username, email, password).then(
         () => {
           setMessage('Success! You can now login to myHub')
-          setSuccessful(true) // just hangs here on signup page. redirect to login
+          setSuccessful(true)
         },
         (error) => {
           const resMessage =

@@ -13,13 +13,12 @@ import './App.css'
 
 import AuthService from './services/auth.service'
 
-import Login from './components/login.component'
-import Signup from './components/signup.component'
+import Login from './components/auth/login.component'
+import Signup from './components/auth/signup.component'
 import Home from './components/home.component'
 import UserPage from './components/user/user-page.component'
-import BoardUser from './components/board-user.component'
-import GroupsList from './components/groups-list.component'
-import Group from './components/group.component'
+import GroupSelector from './components/groups/group-selector.component'
+import Group from './components/groups/group.component'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined)
@@ -44,16 +43,10 @@ const App = () => {
           myHub
         </Link>
         <div className='navbar-nav mr-auto'>
-          <li className='nav-item'>
-            <Link to='/groups' className='nav-link'>
-              Groups
-            </Link>
-          </li>
-
           {currentUser && (
             <li className='nav-item'>
-              <Link to='/user' className='nav-link'>
-                User Board
+              <Link to='/groups' className='nav-link'>
+                Groups
               </Link>
             </li>
           )}
@@ -95,8 +88,7 @@ const App = () => {
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
           <Route exact path='/user' component={UserPage} />
-          <Route path='/user' component={BoardUser} />
-          <Route exact path='/groups' component={GroupsList} />
+          <Route exact path='/groups' component={GroupSelector} />
           <Route path='/groups/:id' component={Group} />
         </Switch>
       </div>

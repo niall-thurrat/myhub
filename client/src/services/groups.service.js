@@ -1,5 +1,5 @@
 /**
- * Groups-list services
+ * Groups data services
  *
  * @author Niall Thurrat
  * @credits Got help from bezkoder for this one:
@@ -15,7 +15,7 @@ const options = {
   headers: authHeader()
 }
 
-class GroupsListDataService {
+class GroupsService {
   getAll () {
     return http.get(`${userPath}/groups`, options)
   }
@@ -33,4 +33,4 @@ class GroupsListDataService {
   }
 }
 
-export default new GroupsListDataService()
+export default new GroupsService()

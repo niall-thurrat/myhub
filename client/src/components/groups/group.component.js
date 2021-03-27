@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react'
-import GroupsListDataService from '../services/groups-list.service'
+import GroupsService from '../../services/groups.service'
 
 export default class Group extends Component {
   constructor (props) {
@@ -30,7 +30,7 @@ export default class Group extends Component {
   }
 
   getGroup (groupId) {
-    GroupsListDataService.get(groupId)
+    GroupsService.get(groupId)
       .then(response => {
         this.setState({
           currentGroup: response.data
@@ -42,7 +42,7 @@ export default class Group extends Component {
   }
 
   getCommits (groupId) {
-    GroupsListDataService.getCommits(groupId)
+    GroupsService.getCommits(groupId)
       .then(response => {
         this.setState({
           groupCommits: response.data

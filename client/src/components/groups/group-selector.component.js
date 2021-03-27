@@ -1,5 +1,5 @@
 /**
- * GroupsList component
+ * Group selector component
  *
  * @author Niall Thurrat
  * @credits Got help from bezkoder for this one:
@@ -7,10 +7,10 @@
  */
 
 import React, { Component } from 'react'
-import GroupsListDataService from '../services/groups-list.service'
+import GroupsService from '../../services/groups.service'
 import { Link } from 'react-router-dom'
 
-export default class GroupsList extends Component {
+export default class GroupSelector extends Component {
   constructor (props) {
     super(props)
     this.handleChangeSearchName = this.handleChangeSearchName.bind(this)
@@ -39,7 +39,7 @@ export default class GroupsList extends Component {
   }
 
   retrieveGroups () {
-    GroupsListDataService.getAll()
+    GroupsService.getAll()
       .then(response => {
         this.setState({
           groups: response.data
@@ -58,7 +58,7 @@ export default class GroupsList extends Component {
   }
 
   handleSearchName () {
-    GroupsListDataService.findByName(this.state.searchName)
+    GroupsService.findByName(this.state.searchName)
       .then(response => {
         this.setState({
           groups: response.data

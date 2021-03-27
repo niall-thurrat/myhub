@@ -31,6 +31,8 @@ const Group = props => {
     socket.on('releaseData', data => {
       setResponse(data)
     })
+
+    return () => socket.disconnect()
   }, [props.match.params.id])
 
   const getGroup = groupId => {

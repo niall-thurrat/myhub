@@ -7,25 +7,29 @@
  */
 
 import http from '../http-common'
+import authHeader from './auth-header'
 import username from './username'
 
-const userUrl = `/users/${username()}`
+const userPath = `/users/${username()}`
+const options = {
+  headers: authHeader()
+}
 
 class GroupsListDataService {
   getAll () {
-    return http.get(`${userUrl}/groups`)
+    return http.get(`${userPath}/groups`, options)
   }
 
   get (id) {
-    return http.get(`${userUrl}/groups/${id}`)
+    return http.get(`${userPath}/groups/${id}`, options)
   }
 
   findByName (name) {
-    return http.get(`${userUrl}/groups?name=${name}`)
+    return http.get(`${userPath}/groups?name=${name}`, options)
   }
 
   getCommits (id) {
-    return http.get(`${userUrl}/groups/${id}/commits`)
+    return http.get(`${userPath}/groups/${id}/commits`, options)
   }
 }
 

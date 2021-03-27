@@ -35,6 +35,7 @@ const signupController = async (req, res, next) => {
 
       newUser.save((err, newUser) => {
         if (err) {
+          console.error(err)
           return next(createError(400, err))
         } else {
           res.setHeader('Content-Type', 'application/json')

@@ -38,7 +38,6 @@ const userSchema = mongoose.Schema({
   gitlabUsername: {
     type: String,
     required: false,
-    unique: true,
     trim: true
   },
   gitlabInstanceUrl: {

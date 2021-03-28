@@ -88,7 +88,7 @@ const Group = props => {
   const commitsColumns = useMemo(
     () => [
       {
-        Header: 'Last 20 commits',
+        Header: 'Commits for all group projects (max 20 per project just now)',
         columns: [
           {
             Header: 'project_id',

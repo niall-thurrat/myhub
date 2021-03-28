@@ -9,6 +9,8 @@
 import React, { useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'
+import ReleaseTable from './release-table.component'
+import CommitsTable from './commits-table.component'
 
 const SOCKET_SERVER = 'http://localhost:8080'
 
@@ -21,15 +23,21 @@ const Group = props => {
 
   const [currentGroup, setCurrentGroup] = useState(initialGroupState)
   const [commits, setCommits] = useState(undefined)
-  const [response, setResponse] = useState({ id: 'change me' })
+  const [releases, setReleases] = useState(undefined)
 
   useEffect(() => {
     getGroup(props.match.params.id)
     getCommits(props.match.params.id)
+    getReleases(props.match.params.id)
 
     const socket = socketIOClient(SOCKET_SERVER)
+
+    socket.on('commitData', data => {
+      setCommits(data) // TODO sort out 20 limit on pagination server side
+    })
+
     socket.on('releaseData', data => {
-      setResponse(data)
+      setReleases(data) // TODO sort out 20 limit on pagination server side
     })
 
     return () => socket.disconnect()
@@ -49,6 +57,16 @@ const Group = props => {
     GroupsService.getCommits(groupId)
       .then(response => {
         setCommits(response.data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  const getReleases = groupId => {
+    GroupsService.getReleases(groupId)
+      .then(response => {
+        setReleases(response.data)
       })
       .catch(e => {
         console.log(e)
@@ -77,31 +95,33 @@ const Group = props => {
           </label>{' '}
           {currentGroup.description}
         </div>
+        <br />
       </div>
+
       <div>
-        <div>
-          <p>Response: {response.id}</p>
-        </div>
         {commits ? (
           <div>
-            <h4>Commits</h4>
-            <div>
-              <label>
-                <strong>Project 1 id:</strong>
-              </label>{' '}
-              {commits.data[0].projectId}
-            </div>
-            <div>
-              <label>
-                <strong>Project 1 commit 1:</strong>
-              </label>{' '}
-              {commits.data[0].commits[0].title}
-            </div>
+            <CommitsTable commits />
+            <br />
           </div>
         ) : (
           <div>
             <br />
-            <p>Error: No commit data found...</p>
+            <p>No commit data found...</p>
+          </div>
+        )}
+      </div>
+
+      <div>
+        {releases ? (
+          <div>
+            <ReleaseTable releases />
+            <br />
+          </div>
+        ) : (
+          <div>
+            <br />
+            <p>No release data found...</p>
           </div>
         )}
       </div>

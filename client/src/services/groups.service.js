@@ -31,6 +31,10 @@ class GroupsService {
   getCommits (id) {
     return http.get(`${userPath}/groups/${id}/commits`, options)
   }
+
+  getReleases (id) {
+    return http.get(`${userPath}/groups/${id}/releases`, options)
+  }
 }
 
 export default new GroupsService()

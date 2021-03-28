@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
 const CommitsTable = ({ columns, data }) => {
   const {
@@ -13,7 +13,13 @@ const CommitsTable = ({ columns, data }) => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable({ columns, data })
+  } = useTable(
+    {
+      columns,
+      data
+    },
+    useSortBy
+  )
 
   return (
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
@@ -24,7 +30,8 @@ const CommitsTable = ({ columns, data }) => {
             {headerGroup.headers.map(column => (
               // eslint-disable-next-line
               <th
-                {...column.getHeaderProps()}
+                {...column.getHeaderProps(
+                  column.getSortByToggleProps())}
                 style={{
                   border: 'solid 1px gray',
                   background: 'aliceblue',

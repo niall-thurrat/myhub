@@ -37,8 +37,14 @@ const Group = props => {
 
     // TODO sort out 20 limit on pagination server side
     socket.on('commitData', newCommits => {
-      setCommits(prevCommits =>
-        prevCommits.concat(newCommits.data))
+      // console.log(`sortedArray: ${sortedArray}`)
+      setCommits(prevCommits => {
+        const joinedArray = prevCommits.concat(newCommits.data)
+
+        return joinedArray.sort(function (a, b) {
+          return new Date(b.created_at) - new Date(a.created_at)
+        })
+      })
     })
 
     // TODO sort out 20 limit on pagination server side

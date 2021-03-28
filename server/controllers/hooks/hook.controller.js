@@ -53,12 +53,20 @@ const handlePushHook = (req, res, next) => {
 
     // TODO handle if there are more than 20 commits in push
 
-    const data = {
-      projectId: projectId,
-      commits: commits
-    }
+    const commitsJson = { data: [] }
 
-    emitter.emit('pushHook', data)
+    commits.forEach(commit => {
+      // relate commit object to its project
+      commit.project_id = projectId
+      // these 2 properties are created to make
+      // webhook more consistent with API data
+      commit.author_name = commit.author.name
+      commit.created_at = commit.timestamp
+
+      commitsJson.data.push(commit)
+    })
+
+    emitter.emit('pushHook', commitsJson)
     res.status(200).send('thanks for the hook!')
   } catch (error) {
     next(error)
@@ -75,6 +83,7 @@ const handlePushHook = (req, res, next) => {
    */
 const handleReleaseHook = (req, res, next) => {
   try {
+    // TODO should we have who? // THIS IS NOT REQUIRED - JUST RETURN JSON
     const data = {
       id: req.body.id,
       name: req.body.name,

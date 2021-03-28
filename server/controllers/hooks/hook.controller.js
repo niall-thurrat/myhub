@@ -48,16 +48,14 @@ const hookController = (req, res, next) => {
    */
 const handlePushHook = (req, res, next) => {
   try {
-    const projectId = req.body.project_id
     const commits = req.body.commits
+    const commitsJson = { data: [] }
 
     // TODO handle if there are more than 20 commits in push
 
-    const commitsJson = { data: [] }
-
     commits.forEach(commit => {
       // relate commit object to its project
-      commit.project_id = projectId
+      commit.project_id = req.body.project_id
       // these 2 properties are created to make
       // webhook more consistent with API data
       commit.author_name = commit.author.name
@@ -83,16 +81,19 @@ const handlePushHook = (req, res, next) => {
    */
 const handleReleaseHook = (req, res, next) => {
   try {
-    // TODO should we have who? // THIS IS NOT REQUIRED - JUST RETURN JSON
-    const data = {
-      id: req.body.id,
-      name: req.body.name,
-      description: req.body.description,
-      tag: req.body.tag,
-      released_at: req.body.released_at
-    }
+    const release = req.body
+    const releaseJson = { data: [release] }
 
-    emitter.emit('releaseHook', data)
+    // TODO handle if there are more than 20 commits in push
+
+    releaseJson.data.forEach(release => {
+      // these 2 properties are created to make
+      // webhook more consistent with API data
+      release.project_id = release.project.id
+      release.tag_name = release.tag
+    })
+
+    emitter.emit('releaseHook', releaseJson)
     res.status(200).send('thanks for the hook!')
   } catch (error) {
     next(error)

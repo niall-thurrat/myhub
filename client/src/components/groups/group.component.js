@@ -9,8 +9,7 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'
-import ReleaseTable from './release-table.component'
-import CommitsTable from './commits-table.component'
+import Table from './table.component'
 
 const SOCKET_SERVER = 'http://localhost:8080'
 
@@ -37,7 +36,6 @@ const Group = props => {
 
     // TODO sort out 20 limit on pagination server side
     socket.on('commitData', newCommits => {
-      // console.log(`sortedArray: ${sortedArray}`)
       setCommits(prevCommits => {
         const joinedArray = prevCommits.concat(newCommits.data)
 
@@ -48,8 +46,14 @@ const Group = props => {
     })
 
     // TODO sort out 20 limit on pagination server side
-    socket.on('releaseData', data => {
-      setReleases(data)
+    socket.on('releaseData', newRelease => {
+      setReleases(prevReleases => {
+        const joinedArray = prevReleases.concat(newRelease.data)
+
+        return joinedArray.sort(function (a, b) {
+          return new Date(b.created_at) - new Date(a.created_at)
+        })
+      })
     })
 
     return () => socket.disconnect()
@@ -91,11 +95,11 @@ const Group = props => {
         Header: 'Commits for all group projects (max 20 per project just now)',
         columns: [
           {
-            Header: 'project_id',
-            accessor: 'project_id'
+            Header: 'commit id',
+            accessor: 'id'
           },
           {
-            Header: 'author_name',
+            Header: 'author',
             accessor: 'author_name'
           },
           {
@@ -103,12 +107,43 @@ const Group = props => {
             accessor: 'message'
           },
           {
-            Header: 'created_at',
+            Header: 'when',
             accessor: 'created_at'
           },
           {
-            Header: 'id',
-            accessor: 'id'
+            Header: 'project id',
+            accessor: 'project_id'
+          }
+        ]
+      }
+    ],
+    []
+  )
+
+  const releasesColumns = useMemo(
+    () => [
+      {
+        Header: 'releases for all group projects (max 20 per project just now)',
+        columns: [
+          {
+            Header: 'tag',
+            accessor: 'tag_name'
+          },
+          {
+            Header: 'name',
+            accessor: 'name'
+          },
+          {
+            Header: 'description',
+            accessor: 'description'
+          },
+          {
+            Header: 'when',
+            accessor: 'created_at'
+          },
+          {
+            Header: 'project id',
+            accessor: 'project_id'
           }
         ]
       }
@@ -155,7 +190,7 @@ const Group = props => {
       <div>
         {commits ? (
           <div>
-            <CommitsTable
+            <Table
               columns={commitsColumns}
               data={commits}
             />
@@ -172,7 +207,10 @@ const Group = props => {
       <div>
         {releases ? (
           <div>
-            <ReleaseTable releases />
+            <Table
+              columns={releasesColumns}
+              data={releases}
+            />
             <br />
           </div>
         ) : (

@@ -6,7 +6,7 @@
  * https://bezkoder.com/react-crud-web-api/
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'
 import ReleaseTable from './release-table.component'
@@ -32,12 +32,18 @@ const Group = props => {
 
     const socket = socketIOClient(SOCKET_SERVER)
 
-    socket.on('commitData', data => {
-      setCommits(data) // TODO sort out 20 limit on pagination server side
+    // TODO sort then take most recent 20 commits - how to do
+    // this so that commits state continues to affect table?
+
+    // TODO sort out 20 limit on pagination server side
+    socket.on('commitData', newCommits => {
+      setCommits(prevCommits =>
+        prevCommits.concat(newCommits.data))
     })
 
+    // TODO sort out 20 limit on pagination server side
     socket.on('releaseData', data => {
-      setReleases(data) // TODO sort out 20 limit on pagination server side
+      setReleases(data)
     })
 
     return () => socket.disconnect()
@@ -56,7 +62,7 @@ const Group = props => {
   const getCommits = groupId => {
     GroupsService.getCommits(groupId)
       .then(response => {
-        setCommits(response.data)
+        setCommits(response.data.data)
       })
       .catch(e => {
         console.log(e)
@@ -66,42 +72,87 @@ const Group = props => {
   const getReleases = groupId => {
     GroupsService.getReleases(groupId)
       .then(response => {
-        setReleases(response.data)
+        setReleases(response.data.data)
       })
       .catch(e => {
         console.log(e)
       })
   }
 
+  const commitsColumns = useMemo(
+    () => [
+      {
+        Header: 'Last 20 commits',
+        columns: [
+          {
+            Header: 'project_id',
+            accessor: 'project_id'
+          },
+          {
+            Header: 'author_name',
+            accessor: 'author_name'
+          },
+          {
+            Header: 'message',
+            accessor: 'message'
+          },
+          {
+            Header: 'created_at',
+            accessor: 'created_at'
+          },
+          {
+            Header: 'id',
+            accessor: 'id'
+          }
+        ]
+      }
+    ],
+    []
+  )
+
   return (
     <div>
       <div>
-        <h4>Group Dashboard</h4>
-        <div>
-          <label>
-            <strong>Full Name:</strong>
-          </label>{' '}
-          {currentGroup.full_name}
-        </div>
-        <div>
-          <label>
-            <strong>Id:</strong>
-          </label>{' '}
-          {currentGroup.groupId}
-        </div>
-        <div>
-          <label>
-            <strong>Description:</strong>
-          </label>{' '}
-          {currentGroup.description}
-        </div>
-        <br />
+        {currentGroup ? (
+          <div>
+            <h4>Group Dashboard</h4>
+            <div>
+              <label>
+                <strong>Full Name:</strong>
+              </label>{' '}
+              {currentGroup.full_name}
+            </div>
+            <div>
+              <label>
+                <strong>Id:</strong>
+              </label>{' '}
+              {currentGroup.groupId}
+            </div>
+            <div>
+              <label>
+                <strong>Description:</strong>
+              </label>{' '}
+              {currentGroup.description}
+            </div>
+            <br />
+          </div>
+        ) : (
+          <div>
+            <br />
+            <p>Authorization required for
+              group data... please login
+            </p>
+          </div>
+        )}
       </div>
 
       <div>
         {commits ? (
           <div>
-            <CommitsTable commits />
+            <CommitsTable
+              columns={commitsColumns}
+              data={commits}
+            />
             <br />
           </div>
         ) : (

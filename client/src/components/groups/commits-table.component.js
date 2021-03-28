@@ -4,44 +4,9 @@
  */
 
 import React from 'react'
-// import React, { useState, useEffect } from 'react'
 import { useTable } from 'react-table'
 
-const CommitsTable = props => {
-  // const [commits, setCommits] = useState(props)
-
-  const data = React.useMemo(
-    () => [
-      {
-        col1: 'Hello',
-        col2: 'World'
-      },
-      {
-        col1: 'react-table',
-        col2: 'rocks'
-      },
-      {
-        col1: 'whatever',
-        col2: 'you want'
-      }
-    ],
-    []
-  )
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Column 1',
-        accessor: 'col1' // accessor is the "key" in the data
-      },
-      {
-        Header: 'Column 2',
-        accessor: 'col2'
-      }
-    ],
-    []
-  )
-
+const CommitsTable = ({ columns, data }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -54,12 +19,14 @@ const CommitsTable = props => {
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
       <thead>
         {headerGroups.map(headerGroup => (
+          // eslint-disable-next-line
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
+              // eslint-disable-next-line
               <th
                 {...column.getHeaderProps()}
                 style={{
-                  borderBottom: 'solid 3px red',
+                  border: 'solid 1px gray',
                   background: 'aliceblue',
                   color: 'black',
                   fontWeight: 'bold'
@@ -75,13 +42,15 @@ const CommitsTable = props => {
         {rows.map(row => {
           prepareRow(row)
           return (
+            // eslint-disable-next-line
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
                 return (
+                  // eslint-disable-next-line
                   <td
                     {...cell.getCellProps()}
                     style={{
-                      padding: '10px',
+                      padding: '3px',
                       border: 'solid 1px gray',
                       background: 'papayawhip'
                     }}

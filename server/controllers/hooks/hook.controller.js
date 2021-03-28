@@ -3,6 +3,7 @@
  * @author Niall Thurrat
  */
 
+import emitter from '../../lib/emitter'
 import createError from 'http-errors'
 
 /**
@@ -52,11 +53,13 @@ const handlePushHook = (req, res, next) => {
 
     // TODO handle if there are more than 20 commits in push
 
-    const resBody = {
+    const data = {
       projectId: projectId,
       commits: commits
     }
-    res.status(200).json(resBody) // TODO emit event here - remove response json
+
+    emitter.emit('pushHook', data)
+    res.status(200) // TODO emit event here - remove response json
   } catch (error) {
     next(error)
   }
@@ -71,10 +74,14 @@ const handlePushHook = (req, res, next) => {
    *
    */
 const handleReleaseHook = (req, res, next) => {
-  res.status(200)
-    .json(req.body) // TODO emit event here - remove response json
-}
+  const data = {
+    id: req.body.id,
+    description: req.body.description,
+    name: req.body.name
+  }
 
-// console.log('switch 1 works') console.log(`reqBody: ${reqBody}`)
+  emitter.emit('releaseHook', data)
+  res.status(200)
+}
 
 export default hookController

@@ -13,7 +13,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import createError from 'http-errors'
 import { routes } from './routes'
-import { EventEmitter } from 'events'
+import emitter from './lib/emitter'
 const logger = require('morgan')
 
 const app = express()
@@ -26,8 +26,6 @@ mongoose.run().catch(error => {
   console.error(error)
   process.exit(1)
 })
-
-const emitter = new EventEmitter()
 
 const corsOptions = {
   origin: 'http://localhost:3000',
@@ -47,22 +45,15 @@ app.use(logger('dev'))
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', passport.authenticate(
   'jwt', { session: false }), routes.user)
-// app.use('/api/hooks', routes.hook)
+app.use('/api/hooks', routes.hook)
 
-app.post('/api/hooks', function (req, res) {
-  emitter.emit('releaseHook', req.body)
-})
-
+// websocket connection to client
 io.on('connection', socket => {
   emitter.on('releaseHook', function (data) {
-    console.log('emitter firing')
-    const releaseObj = {
-      id: data.id,
-      description: data.description,
-      name: data.name
-    }
-    console.log(releaseObj)
-    socket.emit('releaseData', releaseObj)
+    socket.emit('releaseData', data)
+  })
+  emitter.on('pushHook', function (data) {
+    socket.emit('pushData', data)
   })
 })
 

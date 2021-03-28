@@ -77,8 +77,10 @@ const handleReleaseHook = (req, res, next) => {
   try {
     const data = {
       id: req.body.id,
+      name: req.body.name,
       description: req.body.description,
-      name: req.body.name
+      tag: req.body.tag,
+      released_at: req.body.released_at
     }
 
     emitter.emit('releaseHook', data)

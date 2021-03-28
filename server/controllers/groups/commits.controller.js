@@ -42,18 +42,29 @@ const commitsController = async (req, res, next) => {
         `${URL}/projects/${id}/repository/commits`, params
     ))
 
-    commitsJson.data = await Promise.all(requests)
+    // gets an array of arrays with commit objects
+    const data = await Promise.all(requests)
       .then(responses => Promise.all(
         responses.map(r => r.json())
       ))
-      .then(rJsons => Promise.all(
-        rJsons.map((rj, index) => {
-          return {
-            projectId: ids[index],
-            commits: rj
-          }
+      .then(resJsons => Promise.all(
+        resJsons.map((resJson, index) => {
+          // put project_id in each commit obj
+          resJson.forEach(commit => {
+            commit.project_id = ids[index]
+          })
+          // returns array of commit objects
+          return resJson
         })
       ))
+
+    // push all commits to single array
+    data.forEach(array => {
+      array.forEach(commitObj => {
+        commitsJson.data.push(commitObj)
+      })
+    })
+
     res.status(200).json(commitsJson)
   } catch (error) {
     next(error)

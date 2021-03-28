@@ -50,9 +50,11 @@ app.use('/api/hooks', routes.hook)
 // websocket connection to client
 io.on('connection', socket => {
   emitter.on('releaseHook', function (data) {
+    console.log('RELEASE DATA SENT THROUGH SOCKET')
     socket.emit('releaseData', data)
   })
   emitter.on('pushHook', function (data) {
+    console.log('PUSH DATA SENT THROUGH SOCKET')
     socket.emit('pushData', data)
   })
 })

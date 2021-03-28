@@ -59,7 +59,7 @@ const handlePushHook = (req, res, next) => {
     }
 
     emitter.emit('pushHook', data)
-    res.status(200) // TODO emit event here - remove response json
+    res.status(200).send('thanks for the hook!')
   } catch (error) {
     next(error)
   }
@@ -74,14 +74,18 @@ const handlePushHook = (req, res, next) => {
    *
    */
 const handleReleaseHook = (req, res, next) => {
-  const data = {
-    id: req.body.id,
-    description: req.body.description,
-    name: req.body.name
-  }
+  try {
+    const data = {
+      id: req.body.id,
+      description: req.body.description,
+      name: req.body.name
+    }
 
-  emitter.emit('releaseHook', data)
-  res.status(200)
+    emitter.emit('releaseHook', data)
+    res.status(200).send('thanks for the hook!')
+  } catch (error) {
+    next(error)
+  }
 }
 
 export default hookController

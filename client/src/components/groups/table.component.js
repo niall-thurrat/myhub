@@ -66,8 +66,7 @@ const CommitsTable = ({ columns, data }) => {
                     {...cell.getCellProps()}
                     style={{
                       padding: '3px',
-                      border: 'solid 1px gray',
-                      background: 'papayawhip'
+                      border: 'solid 1px gray'
                     }}
                     // eslint-disable-next-line
                   >{cell.render('Cell')}</td>

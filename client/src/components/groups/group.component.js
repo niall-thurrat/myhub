@@ -157,25 +157,18 @@ const Group = props => {
         {currentGroup ? (
           <div>
             <h4>Group Dashboard</h4>
-            <div>
-              <label>
-                <strong>Full Name:</strong>
-              </label>{' '}
+            <p>
+              <strong>Full Name: </strong>
               {currentGroup.full_name}
-            </div>
-            <div>
-              <label>
-                <strong>Id:</strong>
-              </label>{' '}
+            </p>
+            <p>
+              <strong>Id: </strong>
               {currentGroup.groupId}
-            </div>
-            <div>
-              <label>
-                <strong>Description:</strong>
-              </label>{' '}
+            </p>
+            <p>
+              <strong>Description: </strong>
               {currentGroup.description}
-            </div>
-            <br />
+            </p>
           </div>
         ) : (
           <div>

@@ -24,14 +24,14 @@ const notificationSchema = mongoose.Schema({
     required: false
   },
   gitlabCreatedBy: {
-    type: Date,
+    type: String,
     required: false
   },
   gitlabInstanceUrl: {
     type: mongoose.SchemaTypes.Url,
     required: true
   },
-  pushCommitCount: {
+  pushCommitsCount: {
     type: Number,
     required: false
   },

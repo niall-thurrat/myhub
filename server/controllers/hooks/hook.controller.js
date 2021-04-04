@@ -3,6 +3,8 @@
  * @author Niall Thurrat
  */
 
+import Notification from '../../models/notification.model'
+import { removeUrlPath, checkNested } from '../../utils/utils'
 import emitter from '../../lib/emitter'
 import createError from 'http-errors'
 
@@ -51,6 +53,8 @@ const handlePushHook = (req, res, next) => {
     const commits = req.body.commits
     const commitsJson = { data: [] }
 
+    addNotificationToDb(req.body)
+
     // TODO handle if there are more than 20 commits in push
 
     commits.forEach(commit => {
@@ -84,6 +88,8 @@ const handleReleaseHook = (req, res, next) => {
     const release = req.body
     const releaseJson = { data: [release] }
 
+    addNotificationToDb(release)
+
     // TODO handle if there are more than 20 commits in push
 
     releaseJson.data.forEach(release => {
@@ -98,6 +104,61 @@ const handleReleaseHook = (req, res, next) => {
   } catch (error) {
     next(error)
   }
+}
+
+/**
+   * Generates and adds a notification to the database
+   *
+   * @param {Object} req - request object
+   * @param {Object} res - response object
+   * @param {Function} next - Next middleware func
+   */
+const addNotificationToDb = (data) => {
+  const projectUrl = data.project.web_url
+  let createdBy = null
+  let createdAt = null
+  let pushCommitsCount = null
+  let releaseTag = null
+
+  // get gitlab username in different webhook data stuctures
+  if (checkNested(data, 'user_username')) {
+    createdBy = data.user_username
+  } else if (checkNested(data, 'user', 'username')) {
+    createdBy = data.user.username
+  }
+
+  // get gitlab createdAt if applicable
+  if (checkNested(data, 'created_at')) {
+    createdAt = data.created_at
+  }
+
+  // get gitlab push total_commits_count if applicable
+  if (checkNested(data, 'total_commits_count')) {
+    pushCommitsCount = data.total_commits_count
+  }
+
+  // get gitlab release tag if applicable
+  if (checkNested(data, 'tag')) {
+    releaseTag = data.tag
+  }
+
+  const notification = new Notification({
+    gitlabProjectId: data.project.id,
+    gitlabProjectName: data.project.name,
+    type: data.object_kind,
+    gitlabCreatedAt: createdAt,
+    gitlabCreatedBy: createdBy,
+    gitlabInstanceUrl: removeUrlPath(projectUrl),
+    pushCommitsCount: pushCommitsCount,
+    releaseTag: releaseTag
+  })
+
+  notification.save(err => {
+    // TODO these errors should be logged
+    if (err) {
+      console.error(err)
+    }
+  })
 }
 
 export default hookController

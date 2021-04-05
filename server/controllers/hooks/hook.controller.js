@@ -116,11 +116,8 @@ const handleReleaseHook = (req, res, next) => {
 const addNotificationToDb = (data) => {
   const projectUrl = data.project.web_url
   let createdBy = null
-  let createdAt = null
-  let pushCommitsCount = null
-  let releaseTag = null
 
-  // get gitlab username in different webhook data stuctures
+  // get gitlab username in different webhook data stuctures, if applicable
   if (checkNested(data, 'user_username')) {
     createdBy = data.user_username
   } else if (checkNested(data, 'user', 'username')) {
@@ -128,19 +125,16 @@ const addNotificationToDb = (data) => {
   }
 
   // get gitlab createdAt if applicable
-  if (checkNested(data, 'created_at')) {
-    createdAt = data.created_at
-  }
+  const createdAt = checkNested(data, 'created_at')
+    ? data.created_at : null
 
   // get gitlab push total_commits_count if applicable
-  if (checkNested(data, 'total_commits_count')) {
-    pushCommitsCount = data.total_commits_count
-  }
+  const pushCommitsCount = checkNested(data, 'total_commits_count')
+    ? data.total_commits_count : null
 
   // get gitlab release tag if applicable
-  if (checkNested(data, 'tag')) {
-    releaseTag = data.tag
-  }
+  const releaseTag = checkNested(data, 'tag')
+    ? data.tag : null
 
   const notification = new Notification({
     gitlabProjectId: data.project.id,

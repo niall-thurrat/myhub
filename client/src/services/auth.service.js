@@ -17,7 +17,6 @@ const signup = (username, email, password) => {
 }
 
 const login = (username, password) => {
-  console.log('OK HERE')
   return http.post('/auth/login', {
     username,
     password

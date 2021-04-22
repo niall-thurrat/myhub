@@ -10,6 +10,7 @@ import groupsController from '../controllers/groups/groups.controller'
 import groupController from '../controllers/groups/group.controller'
 import commitsController from '../controllers/groups/commits.controller'
 import releasesController from '../controllers/groups/releases.controller'
+import notificationsController from '../controllers/groups/notifications.controller'
 
 const userRouter = express.Router()
 
@@ -17,10 +18,10 @@ userRouter.route('/')
   .get(userController.get)
   .patch(userController.edit)
 
-// userRouter.get('/', groupsContoller.getAll)
 userRouter.get('/groups', groupsController)
 userRouter.get('/groups/:id', groupController)
 userRouter.get('/groups/:id/commits', commitsController)
 userRouter.get('/groups/:id/releases', releasesController)
+userRouter.get('/groups/:id/notifications', notificationsController)
 
 export default userRouter

@@ -23,6 +23,7 @@ const loginController = async (req, res, next) => {
   try {
     const username = req.body.username
     const password = req.body.password
+    const secret = process.env.JWT_SECRET
 
     const user = await User.findOne({ username })
 
@@ -39,7 +40,8 @@ const loginController = async (req, res, next) => {
           email: user.email
         }
 
-        jwt.sign(payload, process.env.JWT_SECRET,
+        jwt.sign(payload, secret,
+          // jwt expires after 2 hours
           { expiresIn: 7200 }, (err, token) => {
             if (err) {
               return next(createError(500,

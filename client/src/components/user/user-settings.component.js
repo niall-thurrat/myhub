@@ -3,35 +3,22 @@
  * @author Niall Thurrat
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import UserService from '../../services/user.service'
 
-const UserSettings = () => {
-  const [user, setUser] = useState({})
-  const [message, setMessage] = useState('')
-
-  useEffect(() => {
-    UserService.getUser().then(
-      (response) => {
-        setUser(response.data.user)
-      },
-      (error) => {
-        console.error(error.response)
-      }
-    )
-  }, [])
-
+const UserSettings = (props) => {
   const handleInputChange = event => {
     const { name, value } = event.target
-    setUser({ ...user, [name]: value })
+    props.onChange({ ...props.user, [name]: value })
   }
 
   const updateSettings = () => {
-    UserService.updateUser(user)
+    UserService.updateUser(props.user)
       .then(response => {
+        console.log('sucvjkvdlkln!!!!!')
         // TODO determin if person is now able to access API data
         // ...and communicate this in message
-        setMessage('The settings were updated successfully!')
+        // setMessage('The settings were updated successfully!')
       })
       .catch(e => {
         console.log(e)
@@ -62,7 +49,7 @@ const UserSettings = () => {
               className='form-control'
               id='gitlabToken'
               name='gitlabToken'
-              value={user.gitlabToken}
+              value={props.user.gitlabToken}
               onChange={handleInputChange}
             />
           </div>
@@ -73,7 +60,7 @@ const UserSettings = () => {
               className='form-control'
               id='gitlabInstanceUrl'
               name='gitlabInstanceUrl'
-              value={user.gitlabInstanceUrl}
+              value={props.user.gitlabInstanceUrl}
               onChange={handleInputChange}
             />
           </div>
@@ -84,7 +71,7 @@ const UserSettings = () => {
               className='form-control'
               id='gitlabId'
               name='gitlabId'
-              value={user.gitlabId}
+              value={props.user.gitlabId}
               onChange={handleInputChange}
             />
           </div>
@@ -98,7 +85,7 @@ const UserSettings = () => {
             Update
         </button>
 
-        <p>{message}</p>
+        {/* <p>{message}</p> */}
       </div>
     </div>
   )

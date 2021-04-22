@@ -15,16 +15,4 @@ const httpCommon = axios.create({
   }
 })
 
-// redirect unautorised users to login
-httpCommon.interceptors.response.use(
-  response => {
-    return response
-  },
-  error => {
-    if (error.response.status === 401) {
-      window.location = '/login'
-    }
-    return Promise.reject(error)
-  })
-
 export default httpCommon

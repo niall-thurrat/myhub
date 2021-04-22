@@ -10,6 +10,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'
 import Table from './table.component'
+import { MDBNotification } from 'mdbreact'
 
 const SOCKET_SERVER = 'http://localhost:8080'
 
@@ -153,65 +154,68 @@ const Group = props => {
 
   return (
     <div>
-      <div>
-        {currentGroup ? (
-          <div>
-            <h4>Group Dashboard</h4>
-            <p>
-              <strong>Full Name: </strong>
-              {currentGroup.full_name}
-            </p>
-            <p>
-              <strong>Id: </strong>
-              {currentGroup.groupId}
-            </p>
-            <p>
-              <strong>Description: </strong>
-              {currentGroup.description}
-            </p>
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>Authorization required for
-              group data... please login
-            </p>
-          </div>
-        )}
-      </div>
+      <div className='container mt-3 float-left w-75'>
+        <div>
+          <h4>Group Dashboard</h4>
+          <p>
+            <strong>Full Name: </strong>
+            {currentGroup.full_name}
+          </p>
+          <p>
+            <strong>Id: </strong>
+            {currentGroup.groupId}
+          </p>
+          <p>
+            <strong>Description: </strong>
+            {currentGroup.description}
+          </p>
+        </div>
 
-      <div>
-        {commits ? (
-          <div>
-            <Table
-              columns={commitsColumns}
-              data={commits}
-            />
-            <br />
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>No commit data found...</p>
-          </div>
-        )}
-      </div>
+        <div>
+          {commits ? (
+            <div>
+              <Table
+                columns={commitsColumns}
+                data={commits}
+              />
+              <br />
+            </div>
+          ) : (
+            <div>
+              <br />
+              <p>No commit data found...</p>
+            </div>
+          )}
+        </div>
 
-      <div>
-        {releases ? (
-          <div>
-            <Table
-              columns={releasesColumns}
-              data={releases}
-            />
-            <br />
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>No release data found...</p>
-          </div>
-        )}
+        <div>
+          {releases ? (
+            <div>
+              <Table
+                columns={releasesColumns}
+                data={releases}
+              />
+              <br />
+            </div>
+          ) : (
+            <div>
+              <br />
+              <p>No release data found...</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <div
+        className='container mt-3 float-right w-25 p-1'
+      >
+        <MDBNotification
+          show
+          fade
+          iconClassName='text-primary'
+          title='Bootstrap'
+          message='Hello, world! This is a toast message.'
+          text='11 mins ago'
+        />
       </div>
     </div>
   )

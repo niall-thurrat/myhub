@@ -76,7 +76,7 @@ export default class GroupSelector extends Component {
     const currentGroup = this.state.currentGroup
 
     return (
-      <div className='list row'>
+      <div className='list row content-pad'>
 
         <div className='col-md-8'>
           <div className='input-group mb-3'>

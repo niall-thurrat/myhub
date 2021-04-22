@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
+
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'bootstrap-css-only/css/bootstrap.min.css'
 import 'mdbreact/dist/css/mdb.css'
@@ -22,7 +23,6 @@ import Home from './components/home.component'
 import UserPage from './components/user/user-page.component'
 import GroupSelector from './components/groups/group-selector.component'
 import Group from './components/groups/group.component'
-import { MDBNotification } from 'mdbreact'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined)
@@ -86,10 +86,7 @@ const App = () => {
         )}
       </nav>
 
-      <div
-        className='container mt-3 float-left w-75'
-        style={{ backgroundColor: 'rgba(255,0,0,0.1)' }}
-      >
+      <div>
         <Switch>
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path='/login' component={Login} />
@@ -98,19 +95,6 @@ const App = () => {
           <Route exact path='/groups' component={GroupSelector} />
           <Route path='/groups/:id' component={Group} />
         </Switch>
-      </div>
-      <div
-        className='container mt-3 float-right w-25 p-1'
-        style={{ backgroundColor: 'rgba(255,0,0,0.1)' }}
-      >
-        <MDBNotification
-          show
-          fade
-          iconClassName='text-primary'
-          title='Bootstrap'
-          message='Hello, world! This is a toast message.'
-          text='11 mins ago'
-        />
       </div>
     </div>
   )

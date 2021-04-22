@@ -31,7 +31,7 @@ const UserPage = (props) => {
   }
 
   return (
-    <div className='container'>
+    <div className='container content-pad'>
       <Profile user={user} />
       <UserSettings user={user} onChange={handleChange} />
     </div>

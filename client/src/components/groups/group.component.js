@@ -24,13 +24,16 @@ const Group = props => {
   const [currentGroup, setCurrentGroup] = useState(initialGroupState)
   const [commits, setCommits] = useState(undefined)
   const [releases, setReleases] = useState(undefined)
+  const [notifications, setNotifications] = useState(undefined)
 
   useEffect(() => {
-    getGroup(props.match.params.id)
-    getCommits(props.match.params.id)
-    getReleases(props.match.params.id)
-
+    const id = props.match.params.id
     const socket = socketIOClient(SOCKET_SERVER)
+
+    getGroup(id)
+    getCommits(id)
+    getReleases(id)
+    getNotifications(id)
 
     // TODO sort then take most recent 20 commits - how to do
     // this so that commits state continues to affect table?
@@ -84,6 +87,18 @@ const Group = props => {
     GroupsService.getReleases(groupId)
       .then(response => {
         setReleases(response.data.data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  const getNotifications = groupId => {
+    GroupsService.getNotifications(groupId)
+      .then(response => {
+        setNotifications(response.data.data)
+        console.log('ok to here')
+        console.log(response.data.data)
       })
       .catch(e => {
         console.log(e)
@@ -152,6 +167,28 @@ const Group = props => {
     []
   )
 
+  const doTimeDate = note => {
+    const date = note.gitlabCreatedAt || note.createdAt
+
+    return new Date(date).toLocaleTimeString() + ' - ' +
+      new Date(date).toLocaleDateString()
+  }
+
+  const doMessage = note => {
+    switch (note.type) {
+      case 'push':
+        return `${note.gitlabCreatedBy} has pushed ` +
+          `${note.pushCommitsCount} commits to ${note.gitlabProjectName}`
+
+      case 'release':
+        return `Release ${note.releaseTag} has been made for ` +
+          note.gitlabProjectName
+
+      default:
+        return 'doMessage error'
+    }
+  }
+
   return (
     <div>
       <div className='container mt-3 float-left w-75'>
@@ -205,17 +242,25 @@ const Group = props => {
           )}
         </div>
       </div>
-      <div
-        className='container mt-3 float-right w-25 p-1'
-      >
-        <MDBNotification
-          show
-          fade
-          iconClassName='text-primary'
-          title='Bootstrap'
-          message='Hello, world! This is a toast message.'
-          text='11 mins ago'
-        />
+
+      <div className='container mt-3 float-right w-25 p-1'>
+        {notifications ? (notifications.map((note) =>
+          <MDBNotification
+            key={note}
+            show
+            fade
+            iconClassName='text-primary'
+            title={`${note.type} event`}
+            text={doTimeDate(note)}
+            message={doMessage(note)}
+          />
+        )
+        ) : (
+          <div>
+            <br />
+            <p>No new notifications!</p>
+          </div>
+        )}
       </div>
     </div>
   )

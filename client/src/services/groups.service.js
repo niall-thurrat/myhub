@@ -35,6 +35,10 @@ class GroupsService {
   getReleases (id) {
     return http.get(`${userPath}/groups/${id}/releases`, options)
   }
+
+  getNotifications (id) {
+    return http.get(`${userPath}/groups/${id}/notifications`, options)
+  }
 }
 
 export default new GroupsService()

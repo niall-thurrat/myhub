@@ -101,8 +101,9 @@ export default class GroupSelector extends Component {
 
         <div className='col-md-6'>
           <h4>Groups List</h4>
-          <ul className='list-group'>
-            {groups &&
+          {groups ? (
+            <ul className='list-group'>
+              {groups &&
               groups.map((group, index) => (
                 <li
                   className={
@@ -115,7 +116,10 @@ export default class GroupSelector extends Component {
                   {group.full_name}
                 </li>
               ))}
-          </ul>
+            </ul>
+          ) : (
+            <p>No groups found. Check your profile page to ensure you are connected to your GitLab account.</p>
+          )}
         </div>
 
         <div className='col-md-6'>

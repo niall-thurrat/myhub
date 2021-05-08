@@ -32,7 +32,7 @@ const UserPage = (props) => {
 
   return (
     <div className='container content-pad'>
-      <Profile user={user} />
+      <Profile user={user} onChange={handleChange} />
       <UserSettings user={user} onChange={handleChange} />
     </div>
   )

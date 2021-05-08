@@ -97,7 +97,6 @@ const Group = props => {
     GroupsService.getNotifications(groupId)
       .then(response => {
         setNotifications(response.data.data)
-        console.log(response.data.data)
       })
       .catch(e => {
         console.log(e)

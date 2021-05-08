@@ -10,7 +10,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'
 import Table from './table.component'
-import { MDBNotification } from 'mdbreact'
+import Notifications from './notifications.component'
 
 const SOCKET_SERVER = 'http://localhost:8080'
 
@@ -97,7 +97,6 @@ const Group = props => {
     GroupsService.getNotifications(groupId)
       .then(response => {
         setNotifications(response.data.data)
-        console.log('ok to here')
         console.log(response.data.data)
       })
       .catch(e => {
@@ -167,28 +166,6 @@ const Group = props => {
     []
   )
 
-  const doTimeDate = note => {
-    const date = note.gitlabCreatedAt || note.createdAt
-
-    return new Date(date).toLocaleTimeString() + ' - ' +
-      new Date(date).toLocaleDateString()
-  }
-
-  const doMessage = note => {
-    switch (note.type) {
-      case 'push':
-        return `${note.gitlabCreatedBy} has pushed ` +
-          `${note.pushCommitsCount} commits to ${note.gitlabProjectName}`
-
-      case 'release':
-        return `Release ${note.releaseTag} has been made for ` +
-          note.gitlabProjectName
-
-      default:
-        return 'doMessage error'
-    }
-  }
-
   return (
     <div>
       <div className='container mt-3 float-left w-75'>
@@ -244,23 +221,7 @@ const Group = props => {
       </div>
 
       <div className='container mt-3 float-right w-25 p-1'>
-        {notifications ? (notifications.map((note) =>
-          <MDBNotification
-            key={note}
-            show
-            fade
-            iconClassName='text-primary'
-            title={`${note.type} event`}
-            text={doTimeDate(note)}
-            message={doMessage(note)}
-          />
-        )
-        ) : (
-          <div>
-            <br />
-            <p>No new notifications!</p>
-          </div>
-        )}
+        <Notifications notifications={notifications} />
       </div>
     </div>
   )

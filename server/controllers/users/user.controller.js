@@ -45,11 +45,10 @@ userController.edit = (req, res, next) => {
   try {
     // TODO password change must be managed
     const username = req.user.username
-    const name = req.user.username
+    const name = req.user.name
     const email = req.user.email
     const token = req.body.gitlabToken
     const url = req.body.gitlabInstanceUrl
-    const id = req.body.gitlabId
 
     // updates token for future GitLab API requests
     if (token) req.user.gitlabToken = token
@@ -58,8 +57,7 @@ userController.edit = (req, res, next) => {
       name: name,
       email: email,
       gitlabToken: token,
-      gitlabInstanceUrl: url,
-      gitlabId: id
+      gitlabInstanceUrl: url
     }
 
     for (const key in editData) {

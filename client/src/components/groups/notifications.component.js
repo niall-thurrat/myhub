@@ -31,9 +31,9 @@ const Notifications = props => {
 
   return (
     <div>
-      {props.notifications ? (props.notifications.map((note) =>
+      {props.notifications ? (props.notifications.map((note, index) =>
         <MDBNotification
-          key={note}
+          key={index}
           show
           fade
           iconClassName='text-primary'

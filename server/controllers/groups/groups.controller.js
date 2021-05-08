@@ -24,7 +24,8 @@ const groupsController = (req, res, next) => {
   const nameValue = req.query.name
   const nameQuery = nameValue
     ? nameValue.toLowerCase() : null
-  const accessValue = '30' // CHANGE THIS HARD CODE
+  // min_access_level 30 is at least 'Developer' access
+  const accessValue = '30'
   const accessQuery = '?min_access_level='
   const myGroupsUrl = `${URL}/groups${accessQuery}${accessValue}`
 

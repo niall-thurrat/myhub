@@ -24,7 +24,11 @@ const notificationsController = async (req, res, next) => {
   try {
     const token = req.user.gitlabToken
     const groupId = req.params.id
-    const projectsUrl = `${URL}/groups/${groupId}/projects`
+    // min_access_level 40 is at least 'Maintainer' access
+    // Maintainer access required for webhook notifications
+    const accessValue = '40'
+    const accessQuery = '?min_access_level='
+    const projectsUrl = `${URL}/groups/${groupId}/projects${accessQuery}${accessValue}`
     const params = {
       headers: { 'PRIVATE-TOKEN': token }
     }
@@ -49,9 +53,6 @@ const notificationsController = async (req, res, next) => {
       if (err) console.error(err)
       return docs
     })
-
-    // TODO THINK ABOUT.... AT WHAT POINT DO YOU SPECIFIY ACCESS LEVEL FOR USER HERE???
-    // TODO TEST WITH MULTIPLE NOTIFICATIONS (ONLY ONE IN AT PRESENT
 
     res.status(200).json(releasesJson)
   } catch (error) {

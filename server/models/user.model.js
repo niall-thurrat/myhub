@@ -49,6 +49,11 @@ const userSchema = mongoose.Schema({
     type: String,
     required: false,
     trim: true
+  },
+  gitlabApiConnection: {
+    type: Boolean,
+    default: false,
+    trim: true
   }
 }, { timestamps: true })
 

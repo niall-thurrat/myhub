@@ -7,8 +7,6 @@ import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
 import createError from 'http-errors'
 
-const URL = 'https://gitlab.lnu.se/api/v4'
-
 /**
  * Get a user's GitLab groups (simplified)
  * Handling GET requests to endpoint /api/users/:username/groups
@@ -21,13 +19,14 @@ const URL = 'https://gitlab.lnu.se/api/v4'
  */
 const groupsController = (req, res, next) => {
   const token = req.user.gitlabToken
+  const url = req.user.gitlabInstanceUrl
   const nameValue = req.query.name
   const nameQuery = nameValue
     ? nameValue.toLowerCase() : null
   // min_access_level 30 is at least 'Developer' access
   const accessValue = '30'
   const accessQuery = '?min_access_level='
-  const myGroupsUrl = `${URL}/groups${accessQuery}${accessValue}`
+  const myGroupsUrl = `${url}/api/v4/groups${accessQuery}${accessValue}`
 
   if (!token) {
     return next(createError(401,

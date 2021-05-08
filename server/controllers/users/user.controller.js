@@ -41,17 +41,20 @@ userController.get = async (req, res, next) => {
   * @response success gives 200 OK with JSON body
   *
   */
-userController.edit = (req, res, next) => {
+userController.edit = async (req, res, next) => {
   try {
     // TODO password change must be managed
     const username = req.user.username
-    const name = req.user.name
-    const email = req.user.email
+    const url = req.body.gitlabInstanceUrl || req.user.gitlabInstanceUrl
+    const name = req.body.name
+    const email = req.body.email
     const token = req.body.gitlabToken
-    const url = req.body.gitlabInstanceUrl
 
     // updates token for future GitLab API requests
     if (token) req.user.gitlabToken = token
+
+    // TODO checkTokenWorks = (next, groupsUrl, token)
+    // and edit gitlabApiConnection property accordingly
 
     const editData = {
       name: name,
@@ -84,5 +87,34 @@ userController.edit = (req, res, next) => {
     next(error)
   }
 }
+
+// TODO get below GitLab API connection check working - currently produces
+// Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+// /**
+//   * Check if token enables access to a user's API data
+//   *
+//   * @param {Function} next - Next middleware func
+//   * @param {String} groupsUrl - url to a user's groups through the GitLab API
+//   * @param {String} token - GitLab Personal Access Token
+//   * @returns {boolean}
+//   *
+//   */
+// const checkTokenWorks = (next, groupsUrl, token) => {
+//   fetch(groupsUrl, {
+//     headers: { 'PRIVATE-TOKEN': token }
+//   })
+//     .then(res => {
+//       console.log('FETCH SENT AND RES RECEIVED')
+//       if (res.statusCode === 200) {
+//         return true
+//       } else {
+//         return false
+//       }
+//     })
+//     .catch(error => {
+//       next(createError(error))
+//     })
+// }
 
 export default userController

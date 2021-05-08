@@ -30,7 +30,8 @@ export default passport => {
               name: user.name,
               username: user.username,
               email: user.email,
-              gitlabToken: user.gitlabToken
+              gitlabToken: user.gitlabToken,
+              gitlabInstanceUrl: user.gitlabInstanceUrl
             })
           }
           return done(null, false)

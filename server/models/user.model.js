@@ -54,6 +54,27 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
     trim: true
+  },
+  lastGroupViews: [
+    {
+      groupId: {
+        type: Number,
+        required: true
+      },
+      viewId: {
+        type: String,
+        required: true
+      },
+      lastViewed: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+  currentViewId: {
+    type: String,
+    required: false,
+    trim: true
   }
 }, { timestamps: true })
 

@@ -6,6 +6,7 @@
 import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
 import createError from 'http-errors'
+import updateGroupViewsInDb from '../../lib/viewsDbUpdater'
 
 const URL = 'https://gitlab.lnu.se/api/v4'
 
@@ -19,28 +20,38 @@ const URL = 'https://gitlab.lnu.se/api/v4'
  * @response success gives 200 OK with JSON body
  *
  */
-const groupController = (req, res, next) => {
+const groupController = async (req, res, next) => {
   const groupId = req.params.id
   const groupUrl = `${URL}/groups/${groupId}`
   const token = req.user.gitlabToken
+  let resStatus
 
   if (!token) {
     return next(createError(401,
       'No GitLab private token set for user'))
   }
 
-  fetch(groupUrl, {
+  const groupJson = await fetch(groupUrl, {
     headers: { 'PRIVATE-TOKEN': token }
   })
-    .then(res => res.json())
-    .then(groupJson => {
-      const simpleGroup = simplifyGroup(groupJson)
-
-      res.status(200).json(simpleGroup)
+    .then(res => {
+      resStatus = res.status
+      return res.json()
     })
     .catch(error =>
       next(createError(error))
     )
+
+  if (resStatus === 200) {
+    const simpleGroup = simplifyGroup(groupJson)
+
+    updateGroupViewsInDb(req)
+    res.status(200).json(simpleGroup)
+  } else {
+    return next(createError(
+      resStatus, groupJson.message
+    ))
+  }
 }
 
 export default groupController

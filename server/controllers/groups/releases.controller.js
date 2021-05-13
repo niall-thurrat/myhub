@@ -26,7 +26,7 @@ const releasesController = async (req, res, next) => {
     const params = {
       headers: { 'PRIVATE-TOKEN': token }
     }
-    const releasesJson = { data: [] }
+    const releasesJson = { releases: [] }
 
     if (!token) {
       return next(createError(401,
@@ -63,7 +63,7 @@ const releasesController = async (req, res, next) => {
     // push all releases to single array
     data.forEach(array => {
       array.forEach(releaseObj => {
-        releasesJson.data.push(releaseObj)
+        releasesJson.releases.push(releaseObj)
       })
     })
 

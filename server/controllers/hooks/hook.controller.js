@@ -51,7 +51,7 @@ const hookController = (req, res, next) => {
 const handlePushHook = (req, res, next) => {
   try {
     const commits = req.body.commits
-    const commitsJson = { data: [] }
+    const commitsJson = { commits: [] }
 
     addNotificationToDb(req.body)
 
@@ -65,7 +65,7 @@ const handlePushHook = (req, res, next) => {
       commit.author_name = commit.author.name
       commit.created_at = commit.timestamp
 
-      commitsJson.data.push(commit)
+      commitsJson.commits.push(commit)
     })
 
     emitter.emit('pushHook', commitsJson)
@@ -86,13 +86,13 @@ const handlePushHook = (req, res, next) => {
 const handleReleaseHook = (req, res, next) => {
   try {
     const release = req.body
-    const releaseJson = { data: [release] }
+    const releaseJson = { release: [release] }
 
     addNotificationToDb(release)
 
     // TODO handle if there are more than 20 commits in push
 
-    releaseJson.data.forEach(release => {
+    releaseJson.release.forEach(release => {
       // these 2 properties are created to make
       // webhook more consistent with API data
       release.project_id = release.project.id

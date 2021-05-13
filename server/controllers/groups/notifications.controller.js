@@ -33,7 +33,7 @@ const notificationsController = async (req, res, next) => {
     const projectsUrl =
       `${URL}/groups/${groupId}/projects${accessQuery}${accessValue}`
     const params = { headers: { 'PRIVATE-TOKEN': token } }
-    const notificationsJson = { data: [] }
+    const notificationsJson = { notifications: [] }
 
     if (!token) {
       return next(createError(401,
@@ -46,7 +46,7 @@ const notificationsController = async (req, res, next) => {
       .then(projects => projects.map(p => p.id))
 
     // use project ids to get notifications from db
-    notificationsJson.data = await Notification.find({
+    notificationsJson.notifications = await Notification.find({
       gitlabProjectId: {
         $in: ids
       }

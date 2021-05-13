@@ -26,7 +26,7 @@ const commitsController = async (req, res, next) => {
     const params = {
       headers: { 'PRIVATE-TOKEN': token }
     }
-    const commitsJson = { data: [] }
+    const commitsJson = { commits: [] }
 
     if (!token) {
       return next(createError(401,
@@ -63,7 +63,7 @@ const commitsController = async (req, res, next) => {
     // push all commits to single array
     data.forEach(array => {
       array.forEach(commitObj => {
-        commitsJson.data.push(commitObj)
+        commitsJson.commits.push(commitObj)
       })
     })
 

@@ -6,6 +6,7 @@
 import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
 import createError from 'http-errors'
+import updateViewsInDb from '../../lib/viewsDbUpdater'
 
 /**
  * Get a user's GitLab groups (simplified)
@@ -27,6 +28,8 @@ const groupsController = (req, res, next) => {
   const accessValue = '30'
   const accessQuery = '?min_access_level='
   const myGroupsUrl = `${url}/api/v4/groups${accessQuery}${accessValue}`
+
+  updateViewsInDb(req)
 
   if (!token) {
     return next(createError(401,

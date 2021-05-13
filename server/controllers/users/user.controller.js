@@ -5,6 +5,7 @@
 
 import User from '../../models/user.model'
 import createError from 'http-errors'
+import updateViewsInDb from '../../lib/viewsDbUpdater'
 
 const userController = {}
 
@@ -28,6 +29,8 @@ userController.get = async (req, res, next) => {
     description: 'user data held by myHub '
   }
 
+  updateViewsInDb(req)
+
   res.status(200).json(resBody)
 }
 
@@ -49,6 +52,8 @@ userController.edit = async (req, res, next) => {
     const name = req.body.name
     const email = req.body.email
     const token = req.body.gitlabToken
+
+    updateViewsInDb(req)
 
     // updates token for future GitLab API requests
     if (token) req.user.gitlabToken = token

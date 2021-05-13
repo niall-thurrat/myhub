@@ -6,7 +6,7 @@
 import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
 import createError from 'http-errors'
-import updateGroupViewsInDb from '../../lib/viewsDbUpdater'
+import updateViewsInDb from '../../lib/viewsDbUpdater'
 
 const URL = 'https://gitlab.lnu.se/api/v4'
 
@@ -25,6 +25,8 @@ const groupController = async (req, res, next) => {
   const groupUrl = `${URL}/groups/${groupId}`
   const token = req.user.gitlabToken
   let resStatus
+
+  updateViewsInDb(req)
 
   if (!token) {
     return next(createError(401,
@@ -45,7 +47,6 @@ const groupController = async (req, res, next) => {
   if (resStatus === 200) {
     const simpleGroup = simplifyGroup(groupJson)
 
-    updateGroupViewsInDb(req)
     res.status(200).json(simpleGroup)
   } else {
     return next(createError(

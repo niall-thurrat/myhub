@@ -57,10 +57,6 @@ const userSchema = mongoose.Schema({
   },
   lastGroupViews: [
     {
-      groupId: {
-        type: Number,
-        required: true
-      },
       viewId: {
         type: String,
         required: true
@@ -74,6 +70,7 @@ const userSchema = mongoose.Schema({
   currentViewId: {
     type: String,
     required: false,
+    default: null,
     trim: true
   }
 }, { timestamps: true })

@@ -6,6 +6,7 @@
 import Notification from '../../models/notification.model'
 import fetch from 'node-fetch'
 import createError from 'http-errors'
+import User from '../../models/user.model'
 
 const URL = 'https://gitlab.lnu.se/api/v4'
 
@@ -23,16 +24,16 @@ const URL = 'https://gitlab.lnu.se/api/v4'
 const notificationsController = async (req, res, next) => {
   try {
     const token = req.user.gitlabToken
+    const username = req.user.username
     const groupId = req.params.id
     // min_access_level 40 is at least 'Maintainer' access
     // Maintainer access required for webhook notifications
     const accessValue = '40'
     const accessQuery = '?min_access_level='
-    const projectsUrl = `${URL}/groups/${groupId}/projects${accessQuery}${accessValue}`
-    const params = {
-      headers: { 'PRIVATE-TOKEN': token }
-    }
-    const releasesJson = { data: [] }
+    const projectsUrl =
+      `${URL}/groups/${groupId}/projects${accessQuery}${accessValue}`
+    const params = { headers: { 'PRIVATE-TOKEN': token } }
+    const notificationsJson = { data: [] }
 
     if (!token) {
       return next(createError(401,
@@ -45,7 +46,7 @@ const notificationsController = async (req, res, next) => {
       .then(projects => projects.map(p => p.id))
 
     // use project ids to get notifications from db
-    releasesJson.data = await Notification.find({
+    notificationsJson.data = await Notification.find({
       gitlabProjectId: {
         $in: ids
       }
@@ -54,10 +55,31 @@ const notificationsController = async (req, res, next) => {
       return docs
     })
 
-    res.status(200).json(releasesJson)
+    notificationsJson.lastViewed = await
+    getGroupLastViewed(username, groupId)
+
+    res.status(200).json(notificationsJson)
   } catch (error) {
     next(error)
   }
+}
+
+/**
+ * get when user last viewed a group
+ *
+ * @param {String} username - myHub username
+ * @param {Number} groupId - GitHub Group ID
+ * @returns {Date} when group was last viewed
+ */
+async function getGroupLastViewed (username, groupId) {
+  const doc = await User.findOne({
+    username: username,
+    'lastGroupViews.groupId': groupId
+  }, {
+    'lastGroupViews.$': 1
+  })
+
+  return doc.lastGroupViews[0].lastViewed
 }
 
 export default notificationsController

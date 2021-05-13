@@ -34,7 +34,6 @@ export default async function updateViewsInDb (req) {
  * @return {String} currentViewId
  */
 async function getCurrentViewId (username) {
-  console.log('FIRING: getCurrentViewIdFromDb')
   const currentViewId = await User.findOne({
     username: username
   })
@@ -51,7 +50,6 @@ async function getCurrentViewId (username) {
  * @param {String} currentViewId
  */
 function updateCurrentViewId (username, currentViewId) {
-  console.log('FIRING: updateCurrentViewIdInDb')
   User.findOneAndUpdate({ username: username },
     { currentViewId: currentViewId },
     err => console.error(err))
@@ -63,11 +61,12 @@ function updateCurrentViewId (username, currentViewId) {
  * @param {Object} req - request object
  */
 function updateGroupViews (req) {
-  console.log('FIRING: updateGroupViewsInDb')
   const username = req.user.username
   const viewId = req.originalUrl
+  const groupId = req.params.id
 
   const viewsObj = {
+    groupId: groupId,
     viewId: viewId,
     lastViewed: new Date()
   }

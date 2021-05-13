@@ -57,6 +57,10 @@ const userSchema = mongoose.Schema({
   },
   lastGroupViews: [
     {
+      groupId: {
+        type: Number,
+        required: true
+      },
       viewId: {
         type: String,
         required: true

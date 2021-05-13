@@ -29,6 +29,19 @@ const Notifications = props => {
     }
   }
 
+  const doIcon = note => {
+    switch (note.type) {
+      case 'push':
+        return 'text-primary'
+
+      case 'release':
+        return 'amber-text'
+
+      default:
+        return 'doIcon error'
+    }
+  }
+
   return (
     <div>
       {props.notifications ? (props.notifications.map((note, index) =>
@@ -36,7 +49,7 @@ const Notifications = props => {
           key={index}
           show
           fade
-          iconClassName='text-primary'
+          iconClassName={doIcon(note)}
           title={`${note.type} event`}
           text={doTimeDate(note)}
           message={doMessage(note)}

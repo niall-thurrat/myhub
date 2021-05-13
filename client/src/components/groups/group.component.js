@@ -41,7 +41,7 @@ const Group = props => {
     // TODO sort out 20 limit on pagination server side
     socket.on('commitData', newCommits => {
       setCommits(prevCommits => {
-        const joinedArray = prevCommits.concat(newCommits.data)
+        const joinedArray = prevCommits.concat(newCommits.commits)
 
         return joinedArray.sort(function (a, b) {
           return new Date(b.created_at) - new Date(a.created_at)
@@ -52,7 +52,7 @@ const Group = props => {
     // TODO sort out 20 limit on pagination server side
     socket.on('releaseData', newRelease => {
       setReleases(prevReleases => {
-        const joinedArray = prevReleases.concat(newRelease.data)
+        const joinedArray = prevReleases.concat(newRelease.release)
 
         return joinedArray.sort(function (a, b) {
           return new Date(b.created_at) - new Date(a.created_at)
@@ -76,7 +76,7 @@ const Group = props => {
   const getCommits = groupId => {
     GroupsService.getCommits(groupId)
       .then(response => {
-        setCommits(response.data.data)
+        setCommits(response.data.commits)
       })
       .catch(e => {
         console.log(e)
@@ -86,7 +86,7 @@ const Group = props => {
   const getReleases = groupId => {
     GroupsService.getReleases(groupId)
       .then(response => {
-        setReleases(response.data.data)
+        setReleases(response.data.releases)
       })
       .catch(e => {
         console.log(e)
@@ -96,7 +96,7 @@ const Group = props => {
   const getNotifications = groupId => {
     GroupsService.getNotifications(groupId)
       .then(response => {
-        setNotifications(response.data.data)
+        setNotifications(response.data.notifications)
       })
       .catch(e => {
         console.log(e)

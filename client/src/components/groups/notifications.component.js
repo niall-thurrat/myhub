@@ -7,6 +7,14 @@ import React from 'react'
 import { MDBNotification } from 'mdbreact'
 
 const Notifications = props => {
+  // const [newNotes, setNewNotes] = useState(undefined)
+  // const [oldNotes, setOldNotes] = useState(undefined)
+
+  // useEffect(() => {
+  //   //
+  //   props.notifications
+  // })
+
   const doTimeDate = note => {
     const date = note.gitlabCreatedAt || note.createdAt
 
@@ -44,23 +52,26 @@ const Notifications = props => {
 
   return (
     <div>
-      {props.notifications ? (props.notifications.map((note, index) =>
-        <MDBNotification
-          key={index}
-          show
-          fade
-          iconClassName={doIcon(note)}
-          title={`${note.type} event`}
-          text={doTimeDate(note)}
-          message={doMessage(note)}
-        />
-      )
+      <p>--- new ---</p>
+      {props.notifications ? (
+        props.notifications.map((note, index) =>
+          <MDBNotification
+            key={index}
+            show
+            fade
+            iconClassName={doIcon(note)}
+            title={`${note.type} event`}
+            text={doTimeDate(note)}
+            message={doMessage(note)}
+          />
+        )
       ) : (
         <div>
           <br />
           <p>No new notifications!</p>
         </div>
       )}
+      <p>--- old ---</p>
     </div>
   )
 }

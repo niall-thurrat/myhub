@@ -25,6 +25,7 @@ const Group = props => {
   const [commits, setCommits] = useState(undefined)
   const [releases, setReleases] = useState(undefined)
   const [notifications, setNotifications] = useState(undefined)
+  const [lastViewed, setLastViewed] = useState(undefined)
 
   useEffect(() => {
     const id = props.match.params.id
@@ -97,6 +98,7 @@ const Group = props => {
     GroupsService.getNotifications(groupId)
       .then(response => {
         setNotifications(response.data.notifications)
+        setLastViewed(response.data.lastViewed)
       })
       .catch(e => {
         console.log(e)
@@ -220,7 +222,7 @@ const Group = props => {
       </div>
 
       <div className='container mt-3 float-right w-25 p-1'>
-        <Notifications notifications={notifications} />
+        <Notifications notes={notifications} lastViewed={lastViewed} />
       </div>
     </div>
   )

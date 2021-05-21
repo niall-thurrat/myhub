@@ -3,17 +3,38 @@
  * @author Niall Thurrat
  */
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { MDBNotification } from 'mdbreact'
 
 const Notifications = props => {
-  // const [newNotes, setNewNotes] = useState(undefined)
-  // const [oldNotes, setOldNotes] = useState(undefined)
+  const [newNotes, setNewNotes] = useState(undefined)
+  const [oldNotes, setOldNotes] = useState(undefined)
 
-  // useEffect(() => {
-  //   //
-  //   props.notifications
-  // })
+  useEffect(() => {
+    const lastViewed = props.lastViewed
+    const notes = props.notes
+    const newNoteArray = []
+    const oldNoteArray = []
+
+    if (notes !== (null || undefined)) {
+      // sort notifications newest first
+      notes.sort(function compare (a, b) {
+        var dateA = new Date(a.gitlabCreatedAt || a.createdAt)
+        var dateB = new Date(b.gitlabCreatedAt || b.createdAt)
+        return dateB - dateA
+      })
+
+      // add to oldNotes or newNotes
+      notes.forEach(n => {
+        if ((n.gitlabCreatedAt || n.createdAt) > lastViewed) {
+          newNoteArray.push(n)
+        } else oldNoteArray.push(n)
+      })
+
+      if (newNoteArray[0]) setNewNotes(newNoteArray)
+      if (oldNoteArray[0]) setOldNotes(oldNoteArray)
+    }
+  }, [props])
 
   const doTimeDate = note => {
     const date = note.gitlabCreatedAt || note.createdAt
@@ -52,9 +73,9 @@ const Notifications = props => {
 
   return (
     <div>
-      <p>--- new ---</p>
-      {props.notifications ? (
-        props.notifications.map((note, index) =>
+      <p align='center'>--- new ---</p>
+      {newNotes ? (
+        newNotes.map((note, index) =>
           <MDBNotification
             key={index}
             show
@@ -67,11 +88,27 @@ const Notifications = props => {
         )
       ) : (
         <div>
-          <br />
-          <p>No new notifications!</p>
+          <p>You're up to date!</p>
         </div>
       )}
-      <p>--- old ---</p>
+      <p align='center'>--- old ---</p>
+      {oldNotes ? (
+        oldNotes.map((note, index) =>
+          <MDBNotification
+            key={index}
+            show
+            fade
+            iconClassName={doIcon(note)}
+            title={`${note.type} event`}
+            text={doTimeDate(note)}
+            message={doMessage(note)}
+          />
+        )
+      ) : (
+        <div>
+          <p>Nothing to see here!</p>
+        </div>
+      )}
     </div>
   )
 }

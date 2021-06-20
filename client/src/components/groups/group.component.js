@@ -61,6 +61,12 @@ const Group = props => {
       })
     })
 
+    socket.on('notesData', newNote => {
+      setNotifications(prevNotes => {
+        return prevNotes.concat(newNote)
+      })
+    })
+
     return () => socket.disconnect()
   }, [props.match.params.id])
 

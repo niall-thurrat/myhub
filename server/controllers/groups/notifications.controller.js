@@ -58,6 +58,8 @@ const notificationsController = async (req, res, next) => {
     notificationsJson.lastViewed = await
     getGroupLastViewed(username, groupId)
 
+    // TODO FIX BUG HERE - notificationsJson.lastViewed is always current dateTime - why?
+
     res.status(200).json(notificationsJson)
   } catch (error) {
     next(error)

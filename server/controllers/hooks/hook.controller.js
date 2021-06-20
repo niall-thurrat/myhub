@@ -22,7 +22,15 @@ const hookController = (req, res, next) => {
   const hookType = req.header(header)
 
   // TODO handle no header
-  // TODO authenticate hook
+  // TODO authenticate hook:
+  //    - hook enpoint must contain myHub username
+  //    - change url in GitLab hook settings
+  //    - get user from db using username in req url
+  //    - user model must change to hold secrets per project per group
+  //    - group settings endpoint should update db with secret
+  //    - check Secret token in X-Gitlab-Token HTTP header against db
+  //    - SUCCESS = pass user as arg
+  //    - FAIL = error 401 response
 
   switch (hookType) {
     case 'Push Hook':
@@ -48,12 +56,13 @@ const hookController = (req, res, next) => {
    * @param {Function} next - Next middleware func
    *
    */
-const handlePushHook = (req, res, next) => {
+const handlePushHook = async (req, res, next) => {
   try {
     const commits = req.body.commits
     const commitsJson = { commits: [] }
 
-    addNotificationToDb(req.body)
+    const note = createNotification(req.body)
+    notificationAddedToDb(note)
 
     // TODO handle if there are more than 20 commits in push
 
@@ -83,12 +92,13 @@ const handlePushHook = (req, res, next) => {
    * @param {Function} next - Next middleware func
    *
    */
-const handleReleaseHook = (req, res, next) => {
+const handleReleaseHook = async (req, res, next) => {
   try {
     const release = req.body
     const releaseJson = { release: [release] }
 
-    addNotificationToDb(release)
+    const note = createNotification(release)
+    notificationAddedToDb(note)
 
     // TODO handle if there are more than 20 commits in push
 
@@ -107,13 +117,12 @@ const handleReleaseHook = (req, res, next) => {
 }
 
 /**
-   * Generates and adds a notification to the database
+   * Creates a Notification json object
    *
-   * @param {Object} req - request object
-   * @param {Object} res - response object
-   * @param {Function} next - Next middleware func
+   * @param {Object} data - GitLab webhook json object (req.body)
+   * @return {Object} Notificaiton json
    */
-const addNotificationToDb = (data) => {
+const createNotification = data => {
   const projectUrl = data.project.web_url
   let createdBy = null
 
@@ -147,10 +156,25 @@ const addNotificationToDb = (data) => {
     releaseTag: releaseTag
   })
 
-  notification.save(err => {
+  return notification
+}
+
+/**
+   * Adds Notification to db then returns db Notification object
+   *
+   * @param {Notification} notification - object for db
+   * @return {Notification} Notification object from db
+   */
+const notificationAddedToDb = (notification) => {
+  notification.save().then((dbNote, err) => {
     // TODO these errors should be logged
     if (err) {
       console.error(err)
+    } else {
+      // TODO emitter should be made from main handling function
+      // TODO are all users receiveing all notifications?
+      // testing from multiple user accounts required
+      emitter.emit('notification', dbNote)
     }
   })
 }

@@ -56,6 +56,10 @@ io.on('connection', socket => {
   emitter.on('pushHook', function (data) {
     socket.emit('commitData', data)
   })
+
+  emitter.on('notification', function (data) {
+    socket.emit('notesData', data)
+  })
 })
 
 // catch 404 errors

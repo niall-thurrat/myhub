@@ -7,6 +7,10 @@ import Notification from '../../models/notification.model'
 import { removeUrlPath, checkNested } from '../../utils/utils'
 import emitter from '../../lib/emitter'
 import createError from 'http-errors'
+import fetch from 'node-fetch'
+require('dotenv').config()
+
+const SLACK_URL = process.env.SLACK_URL
 
 /**
    * GitLab webhook router function
@@ -63,6 +67,7 @@ const handlePushHook = async (req, res, next) => {
 
     const note = createNotification(req.body)
     notificationAddedToDb(note)
+    notifySlack(note)
 
     // TODO handle if there are more than 20 commits in push
 
@@ -99,6 +104,7 @@ const handleReleaseHook = async (req, res, next) => {
 
     const note = createNotification(release)
     notificationAddedToDb(note)
+    notifySlack(note)
 
     // TODO handle if there are more than 20 commits in push
 
@@ -177,6 +183,45 @@ const notificationAddedToDb = (notification) => {
       emitter.emit('notification', dbNote)
     }
   })
+}
+
+/**
+   * Sends a POST request to Slack with notification text
+   *
+   * @param {Notification} notification - A GitLab event notification object
+   */
+const notifySlack = notification => {
+  const body = { text: doText(notification) }
+
+  fetch(SLACK_URL, {
+    headers: { 'Content-type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify(body)
+  })
+    .catch(err =>
+      console.error(err)
+    )
+}
+
+/**
+   * Creates a gitlab event text using notification data
+   *
+   * @param {Notification} notification - A GitLab event notification object
+   * @return {String} GitLab event text
+   */
+const doText = note => {
+  switch (note.type) {
+    case 'push':
+      return `${note.gitlabCreatedBy} has pushed ` +
+         `${note.pushCommitsCount} commits to ${note.gitlabProjectName}`
+
+    case 'release':
+      return `Release ${note.releaseTag} has been made for ` +
+         note.gitlabProjectName
+
+    default:
+      return 'doText error'
+  }
 }
 
 export default hookController

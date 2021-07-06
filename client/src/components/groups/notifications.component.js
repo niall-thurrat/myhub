@@ -73,42 +73,60 @@ const Notifications = props => {
 
   return (
     <div>
-      <p align='center'>--- new ---</p>
-      {newNotes ? (
-        newNotes.map((note, index) =>
-          <MDBNotification
-            key={index}
-            show
-            fade
-            iconClassName={doIcon(note)}
-            title={`${note.type} event`}
-            text={doTimeDate(note)}
-            message={doMessage(note)}
-          />
-        )
-      ) : (
-        <div>
-          <p>You're up to date!</p>
-        </div>
-      )}
-      <p align='center'>--- old ---</p>
-      {oldNotes ? (
-        oldNotes.map((note, index) =>
-          <MDBNotification
-            key={index}
-            show
-            fade
-            iconClassName={doIcon(note)}
-            title={`${note.type} event`}
-            text={doTimeDate(note)}
-            message={doMessage(note)}
-          />
-        )
-      ) : (
-        <div>
-          <p>Nothing to see here!</p>
-        </div>
-      )}
+      <div>
+        <a class='btn btn-primary fa-fw'> {/* href='path/to/settings' aria-label='Delete' */}
+          <i class='fa fa-trash' aria-hidden='true'>&nbsp; Clear notifications</i>
+        </a>
+      </div>
+
+      <div>
+        <p align='center'>--- new ---</p>
+      </div>
+
+      <div>
+        {newNotes ? (
+          newNotes.map((note, index) =>
+            <MDBNotification
+              key={index}
+              show
+              fade
+              iconClassName={doIcon(note)}
+              title={`${note.type} event`}
+              text={doTimeDate(note)}
+              message={doMessage(note)}
+            />
+          )
+        ) : (
+          <div>
+            <p>You're up to date!</p>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <p align='center'>--- old ---</p>
+      </div>
+
+      <div>
+        {oldNotes ? (
+          oldNotes.map((note, index) =>
+            <MDBNotification
+              key={index}
+              show
+              fade
+              iconClassName={doIcon(note)}
+              title={`${note.type} event`}
+              text={doTimeDate(note)}
+              message={doMessage(note)}
+            />
+          )
+        ) : (
+          <div>
+            <p>Nothing to see here!</p>
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }

@@ -73,3 +73,13 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.row-space {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-primary {
+  width: auto;
+  display: block;
+}

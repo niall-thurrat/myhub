@@ -14,7 +14,7 @@ const SLACK_URL = process.env.SLACK_URL
 
 /**
    * GitLab webhook router function
-   * Handling POST requests to endpoint /api/hooks
+   * Handling POST requests to endpoint /api/users/:username/hooks
    *
    * @param {Object} req
    * @param {Object} res

@@ -43,9 +43,7 @@ app.use(logger('dev'))
 // routes
 // app.use('/api', routes.root)
 app.use('/api/auth', routes.auth)
-app.use('/api/users/:username', passport.authenticate(
-  'jwt', { session: false }), routes.user)
-app.use('/api/hooks', routes.hook)
+app.use('/api/users/:username', routes.user)
 
 // websocket connection to client
 io.on('connection', socket => {

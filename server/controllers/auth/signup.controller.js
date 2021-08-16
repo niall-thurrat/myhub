@@ -1,8 +1,3 @@
-/**
- * Signup controller
- * @author Niall Thurrat
- */
-
 import User from '../../models/user.model'
 import createError from 'http-errors'
 

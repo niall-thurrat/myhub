@@ -1,8 +1,3 @@
-/**
- * updates user views in the database
- * @author Niall Thurrat
- */
-
 import User from '../models/user.model'
 
 // TODO handle/log errors in all funcs

@@ -1,8 +1,3 @@
-/**
- * notification model
- * @author Niall Thurrat
- */
-
 import mongoose from 'mongoose'
 require('mongoose-type-url')
 

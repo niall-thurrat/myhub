@@ -1,11 +1,6 @@
 /* eslint no-prototype-builtins: "off" */
 
 /**
- * Utility functions
- * @author Niall Thurrat
- */
-
-/**
  * Create a simple version of a GitLab group
  *
  * @param {Object} json a GitLab group json object

@@ -1,8 +1,3 @@
-/**
- * Authentication routes
- * @author Niall Thurrat
- */
-
 import express from 'express'
 import signupController from '../controllers/auth/signup.controller'
 import loginController from '../controllers/auth/login.controller'

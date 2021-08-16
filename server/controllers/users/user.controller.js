@@ -1,8 +1,3 @@
-/**
- * User controller
- * @author Niall Thurrat
- */
-
 import User from '../../models/user.model'
 import createError from 'http-errors'
 import updateViewsInDb from '../../lib/viewsDbUpdater'

@@ -1,8 +1,4 @@
-/**
- * Webhooks controller
- * @author Niall Thurrat
- */
-
+// import User from '../../models/user.model'
 import Notification from '../../models/notification.model'
 import { removeUrlPath, checkNested } from '../../utils/utils'
 import emitter from '../../lib/emitter'
@@ -21,20 +17,20 @@ const SLACK_URL = process.env.SLACK_URL
    * @param {Function} next - Next middleware func
    *
    */
-const hookController = (req, res, next) => {
+const hookController = async (req, res, next) => {
   const header = 'X-Gitlab-Event'
   const hookType = req.header(header)
+  // const username = req.params.username
 
   // TODO handle no header
+
   // TODO authenticate hook:
-  //    - hook enpoint must contain myHub username
-  //    - change url in GitLab hook settings
-  //    - get user from db using username in req url
-  //    - user model must change to hold secrets per project per group
-  //    - group settings endpoint should update db with secret
+  //    - hash secrets and tokens in db
   //    - check Secret token in X-Gitlab-Token HTTP header against db
   //    - SUCCESS = pass user as arg
   //    - FAIL = error 401 response
+
+  // const user = await User.findOne({ username })
 
   switch (hookType) {
     case 'Push Hook':

@@ -1,14 +1,7 @@
-/**
- * User gitlab group controller
- * @author Niall Thurrat
- */
-
 import fetch from 'node-fetch'
 import { simplifyGroup } from '../../utils/utils'
 import createError from 'http-errors'
 import updateViewsInDb from '../../lib/viewsDbUpdater'
-
-const URL = 'https://gitlab.lnu.se/api/v4'
 
 /**
  * Get one group of a user by id
@@ -21,17 +14,14 @@ const URL = 'https://gitlab.lnu.se/api/v4'
  *
  */
 const groupController = async (req, res, next) => {
-  const groupId = req.params.id
-  const groupUrl = `${URL}/groups/${groupId}`
   const token = req.user.gitlabToken
+  const url = req.user.gitlabInstanceUrl
+  const groupId = req.params.id
+  const groupUrl = `${url}/api/v4/groups/${groupId}`
+
   let resStatus
 
   updateViewsInDb(req)
-
-  if (!token) {
-    return next(createError(401,
-      'No GitLab private token set for user'))
-  }
 
   const groupJson = await fetch(groupUrl, {
     headers: { 'PRIVATE-TOKEN': token }

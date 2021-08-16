@@ -1,8 +1,3 @@
-/**
- * user model
- * @author Niall Thurrat
- */
-
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import validate from '../lib/userValidation'
@@ -52,8 +47,7 @@ const userSchema = mongoose.Schema({
   },
   gitlabApiConnection: {
     type: Boolean,
-    default: false,
-    trim: true
+    default: false
   },
   lastGroupViews: [
     {
@@ -76,6 +70,34 @@ const userSchema = mongoose.Schema({
     required: false,
     default: null,
     trim: true
+  },
+  settings: {
+    slackAppUrl: {
+      type: String,
+      default: null
+    },
+    projects: [
+      {
+        projectId: {
+          type: Number,
+          required: true
+        },
+        webhookSecret: {
+          type: String,
+          default: null
+        },
+        slackNotifications: {
+          getPushEvents: {
+            type: Boolean,
+            default: false
+          },
+          getReleaseEvents: {
+            type: Boolean,
+            default: false
+          }
+        }
+      }
+    ]
   }
 }, { timestamps: true })
 

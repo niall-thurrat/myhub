@@ -10,6 +10,8 @@ import notificationsController from '../controllers/groups/notifications.control
 import settingsController from '../controllers/groups/settings.controller'
 import hooksController from '../controllers/hooks/hooks.controller'
 
+import { hookAuth } from '../middleware/webhook.auth'
+
 const userRouter = express.Router()
 const userAuth = passport.authenticate('jwt', { session: false })
 
@@ -26,6 +28,6 @@ userRouter.route('/groups/:id/settings')
   .get(userAuth, settingsController.get)
   .patch(userAuth, settingsController.edit)
 
-userRouter.post('/hooks', hooksController)
+userRouter.post('/hooks', hookAuth, hooksController)
 
 export default userRouter

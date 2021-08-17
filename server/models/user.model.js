@@ -84,6 +84,7 @@ const userSchema = mongoose.Schema({
         },
         webhookSecret: {
           type: String,
+          trim: false,
           default: null
         },
         slackNotifications: {
@@ -101,11 +102,6 @@ const userSchema = mongoose.Schema({
   }
 }, { timestamps: true })
 
-userSchema.path('password').validate(function (input) {
-  return validate.isGoodPassword(input) &&
-    validate.isCorrectLengthPassword(input)
-})
-
 // using pre-hook to salt and hash password
 userSchema.pre('save', async function (next) {
   const user = this
@@ -118,9 +114,15 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-// Compare hashed login password with database password
 userSchema.methods.comparePassword = function (loginPassword) {
   return bcrypt.compare(loginPassword, this.password)
+}
+
+userSchema.methods.compareHookSecret = async function (hookSecret, projectId) {
+  const project = this.settings.projects.find(
+    p => p.projectId === projectId
+  )
+  return project.webhookSecret === hookSecret
 }
 
 userSchema.path('username').validate(function (input) {
@@ -128,11 +130,16 @@ userSchema.path('username').validate(function (input) {
      validate.isCorrectLengthUsername(input)
 })
 
-userSchema.path('name').validate(function (input) {
+userSchema.path('password').validate(function (input) {
+  return validate.isGoodPassword(input) &&
+    validate.isCorrectLengthPassword(input)
+})
+
+userSchema.path('email').validate(function (input) {
   return validate.isSafe(input)
 }, "You Cannot use the '$' Character")
 
-userSchema.path('email').validate(function (input) {
+userSchema.path('name').validate(function (input) {
   return validate.isSafe(input)
 }, "You Cannot use the '$' Character")
 

@@ -1,4 +1,3 @@
-// import User from '../../models/user.model'
 import Notification from '../../models/notification.model'
 import { removeUrlPath, checkNested } from '../../utils/utils'
 import emitter from '../../lib/emitter'
@@ -9,28 +8,15 @@ require('dotenv').config()
 const SLACK_URL = process.env.SLACK_URL
 
 /**
-   * GitLab webhook router function
-   * Handling POST requests to endpoint /api/users/:username/hooks
-   *
-   * @param {Object} req
-   * @param {Object} res
-   * @param {Function} next - Next middleware func
-   *
-   */
+  * GitLab webhook router function
+  * POST /api/users/:username/hooks
+  *
+  * @param {Object} req - Request object
+  * @param {Object} res - Response object
+  * @param {Function} next - Next middleware func
+  */
 const hookController = async (req, res, next) => {
-  const header = 'X-Gitlab-Event'
-  const hookType = req.header(header)
-  // const username = req.params.username
-
-  // TODO handle no header
-
-  // TODO authenticate hook:
-  //    - hash secrets and tokens in db
-  //    - check Secret token in X-Gitlab-Token HTTP header against db
-  //    - SUCCESS = pass user as arg
-  //    - FAIL = error 401 response
-
-  // const user = await User.findOne({ username })
+  const hookType = req.header('X-Gitlab-Event')
 
   switch (hookType) {
     case 'Push Hook':
@@ -43,19 +29,19 @@ const hookController = async (req, res, next) => {
 
     default:
       return next(createError(400,
-        'Hook request error'
+        'Unsupported X-Gitlab-Event header used'
       ))
   }
 }
 
 /**
-   * GitLab webhook handler for Push Events
-   *
-   * @param {Object} req
-   * @param {Object} res
-   * @param {Function} next - Next middleware func
-   *
-   */
+  * GitLab webhook handler for Push Events
+  *
+  * @param {Object} req - Request object
+  * @param {Object} res - Response object
+  * @param {Function} next - Next middleware func
+  *
+  */
 const handlePushHook = async (req, res, next) => {
   try {
     const commits = req.body.commits
@@ -70,14 +56,12 @@ const handlePushHook = async (req, res, next) => {
     commits.forEach(commit => {
       // relate commit object to its project
       commit.project_id = req.body.project_id
-      // these 2 properties are created to make
-      // webhook more consistent with API data
+      // make webhook more consistent with API data
       commit.author_name = commit.author.name
       commit.created_at = commit.timestamp
 
       commitsJson.commits.push(commit)
     })
-
     emitter.emit('pushHook', commitsJson)
     res.status(200).send('thanks for the hook!')
   } catch (error) {
@@ -86,13 +70,13 @@ const handlePushHook = async (req, res, next) => {
 }
 
 /**
-   * GitLab webhook handler for Release Events
-   *
-   * @param {Object} req
-   * @param {Object} res
-   * @param {Function} next - Next middleware func
-   *
-   */
+  * GitLab webhook handler for Release Events
+  *
+  * @param {Object} req - Request object
+  * @param {Object} res - Response object
+  * @param {Function} next - Next middleware func
+  *
+  */
 const handleReleaseHook = async (req, res, next) => {
   try {
     const release = req.body
@@ -102,11 +86,10 @@ const handleReleaseHook = async (req, res, next) => {
     notificationAddedToDb(note)
     notifySlack(note)
 
-    // TODO handle if there are more than 20 commits in push
+    // TODO handle what to do with more than 20 releases
 
     releaseJson.release.forEach(release => {
-      // these 2 properties are created to make
-      // webhook more consistent with API data
+      // make webhook more consistent with API data
       release.project_id = release.project.id
       release.tag_name = release.tag
     })
@@ -119,11 +102,11 @@ const handleReleaseHook = async (req, res, next) => {
 }
 
 /**
-   * Creates a Notification json object
-   *
-   * @param {Object} data - GitLab webhook json object (req.body)
-   * @return {Object} Notificaiton json
-   */
+  * Creates a Notification json object
+  *
+  * @param {Object} data - GitLab webhook json object (req.body)
+  * @return {Object} Notificaiton json
+  */
 const createNotification = data => {
   const projectUrl = data.project.web_url
   let createdBy = null
@@ -162,11 +145,11 @@ const createNotification = data => {
 }
 
 /**
-   * Adds Notification to db then returns db Notification object
-   *
-   * @param {Notification} notification - object for db
-   * @return {Notification} Notification object from db
-   */
+  * Adds Notification to db then returns db Notification object
+  *
+  * @param {Notification} notification - object for db
+  * @return {Notification} Notification object from db
+  */
 const notificationAddedToDb = (notification) => {
   notification.save().then((dbNote, err) => {
     // TODO these errors should be logged
@@ -182,10 +165,10 @@ const notificationAddedToDb = (notification) => {
 }
 
 /**
-   * Sends a POST request to Slack with notification text
-   *
-   * @param {Notification} notification - A GitLab event notification object
-   */
+  * Sends a POST request to Slack with notification text
+  *
+  * @param {Notification} notification - A GitLab event notification object
+  */
 const notifySlack = notification => {
   const body = { text: doText(notification) }
 
@@ -200,11 +183,11 @@ const notifySlack = notification => {
 }
 
 /**
-   * Creates a gitlab event text using notification data
-   *
-   * @param {Notification} notification - A GitLab event notification object
-   * @return {String} GitLab event text
-   */
+  * Creates a gitlab event text using notification data
+  *
+  * @param {Notification} notification - A GitLab event notification object
+  * @return {String} GitLab event text
+  */
 const doText = note => {
   switch (note.type) {
     case 'push':

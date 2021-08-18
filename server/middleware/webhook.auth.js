@@ -18,6 +18,8 @@ export const hookAuth = async (req, res, next) => {
 
     if (!user) {
       return next(createError(404, 'User not found'))
+    } else if (!hookSecret) {
+      return next(createError(401, 'Gitlab token missing'))
     } else {
       const isMatch = await user.compareHookSecret(hookSecret, projectId)
 

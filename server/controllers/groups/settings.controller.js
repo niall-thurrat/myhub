@@ -26,36 +26,49 @@ settingsController.get = async (req, res, next) => {
     const projectsUrl = `${url}/api/v4/groups/${groupId}/projects${query}${accessLevel}`
     const params = { headers: { 'PRIVATE-TOKEN': token } }
 
-    // get project ids of a group from GitLab
-    const gitlabIds = await fetch(projectsUrl, params)
+    // get project ids+names of a group from GitLab
+    const groupProjects = await fetch(projectsUrl, params)
       .then(res => res.json())
-      .then(projects => projects.map(p => p.id))
+      .then(projects => projects.map(project => {
+        const projectObj = {
+          id: project.id,
+          name: project.name
+        }
+        return projectObj
+      }))
 
     // get project ids from settings in db
     const dbIds = await User.findOne({ username })
-      .then(user => user.settings.projects.map(p => p.projectId))
+      .then(user => user.settings.projects.map(p => p.id))
 
     // remove settings for projects in db not found in gitlab
     if (dbIds.length > 0) {
-      for (const id of dbIds) {
-        if (!gitlabIds.includes(id)) {
+      for (const dbId of dbIds) {
+        if (!groupProjects.some(project => project.id === dbId)) {
           await User.findOneAndUpdate({
             username: username,
-            'settings.projects.projectId': id
+            'settings.projects.id': dbId
           },
-          { $pull: { 'settings.projects': { projectId: id } } })
+          { $pull: { 'settings.projects': { id: dbId } } })
         }
       }
     }
 
     // add default settings for gitlab projects not found in db
-    if (gitlabIds.length > 0) {
-      for (const id of gitlabIds) {
+    if (groupProjects.length > 0) {
+      for (const project of groupProjects) {
         await User.findOneAndUpdate({
           username: username,
-          'settings.projects.projectId': { $ne: id }
+          'settings.projects.id': { $ne: project.id }
         },
-        { $addToSet: { 'settings.projects': { projectId: id } } })
+        {
+          $addToSet: {
+            'settings.projects': {
+              id: project.id,
+              name: project.name
+            }
+          }
+        })
       }
     }
 
@@ -77,23 +90,29 @@ settingsController.get = async (req, res, next) => {
   * @param {Function} next - next middleware func
   */
 settingsController.edit = async (req, res, next) => {
-  const slackAppUrl = req.body.slackAppUrl
-  const webhookSecret = req.body.webhookSecret
-  const getPushEvents = req.body.getPushEvents
-  const getReleaseEvents = req.body.getReleaseEvents
+  const updateType = req.body.updateType
 
-  if (slackAppUrl) {
-    updateSlackAppUrl(req, res, next)
-  } else if (webhookSecret) {
-    updateWebhookSecret(req, res, next)
-  } else if (getPushEvents) {
-    updateGetPushEvents(req, res, next)
-  } else if (getReleaseEvents) {
-    updateGetReleaseEvents(req, res, next)
-  } else {
-    next(createError(400,
-      'Settings update request error'
-    ))
+  switch (updateType) {
+    case 'slackAppUrl':
+      updateSlackAppUrl(req, res, next)
+      break
+
+    case 'webhookSecret':
+      updateWebhookSecret(req, res, next)
+      break
+
+    case 'getPushEvents':
+      updateGetPushEvents(req, res, next)
+      break
+
+    case 'getReleaseEvents':
+      updateGetReleaseEvents(req, res, next)
+      break
+
+    default:
+      return next(createError(400,
+        'Settings update request error'
+      ))
   }
 }
 
@@ -121,7 +140,7 @@ const updateWebhookSecret = async (req, res, next) => {
 
   await User.findOneAndUpdate({
     username: username,
-    'settings.projects.projectId': id
+    'settings.projects.id': id
   },
   { $set: newData }, (err, doc) => {
     if (err) {
@@ -142,7 +161,7 @@ const updateGetPushEvents = async (req, res, next) => {
 
   await User.findOneAndUpdate({
     username: username,
-    'settings.projects.projectId': id
+    'settings.projects.id': id
   },
   { $set: newData }, (err, doc) => {
     if (err) {
@@ -163,7 +182,7 @@ const updateGetReleaseEvents = async (req, res, next) => {
 
   await User.findOneAndUpdate({
     username: username,
-    'settings.projects.projectId': id
+    'settings.projects.id': id
   },
   { $set: newData }, (err, doc) => {
     if (err) {

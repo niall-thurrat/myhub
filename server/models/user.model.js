@@ -78,9 +78,13 @@ const userSchema = mongoose.Schema({
     },
     projects: [
       {
-        projectId: {
+        id: {
           type: Number,
           required: true
+        },
+        name: {
+          type: String,
+          default: null
         },
         webhookSecret: {
           type: String,

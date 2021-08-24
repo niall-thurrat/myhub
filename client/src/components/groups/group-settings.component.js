@@ -1,30 +1,176 @@
-/**
- * Group settings component
- * @author Niall Thurrat
- */
-
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import GroupsService from '../../services/groups.service'
 
 const GroupSettings = props => {
+  const [slackAppUrl, setSlackAppUrl] = useState('')
+  const [projectsSettings, setProjectsSettings] = useState([])
+
+  useEffect(() => {
+    getSettings(props.group.groupId)
+  }, [props.group.groupId])
+
+  const getSettings = (groupId) => {
+    GroupsService.getSettings(groupId)
+      .then(response => {
+        setSlackAppUrl(response.data.slackAppUrl)
+        setProjectsSettings(response.data.projects)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const onChangeSlackUrl = (e) => {
+    setSlackAppUrl(e.target.value)
+  }
+
+  const handleSlackUrlUpdate = () => {
+    const id = props.group.groupId
+    const settings = {
+      updateType: 'slackAppUrl',
+      slackAppUrl: slackAppUrl
+    }
+    GroupsService.updateSettings(id, settings)
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const onChangeHookSecret = (index) => (e) => {
+    const projects = [...projectsSettings]
+    projects[index].webhookSecret = e.target.value
+    setProjectsSettings(projects)
+  }
+
+  const handleHookSecretUpdate = (index, projectId) => {
+    const groupId = props.group.groupId
+    const secret = projectsSettings[index].webhookSecret
+    const settings = {
+      updateType: 'webhookSecret',
+      projectId: projectId,
+      webhookSecret: secret
+    }
+    GroupsService.updateSettings(groupId, settings)
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const handleSlackNotificationsUpdate = (index, projectId, checked, type) => {
+    const projects = [...projectsSettings]
+    const groupId = props.group.groupId
+    const settings = { projectId: projectId }
+
+    if (type === 'push') {
+      projects[index].slackNotifications.getPushEvents = checked
+      settings.updateType = 'getPushEvents'
+      settings.getPushEvents = checked
+    } else if (type === 'release') {
+      projects[index].slackNotifications.getReleaseEvents = checked
+      settings.updateType = 'getReleaseEvents'
+      settings.getReleaseEvents = checked
+    }
+
+    setProjectsSettings(projects)
+
+    GroupsService.updateSettings(groupId, settings)
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
   return (
     <div>
-      {props.group ? (
-        <div>
-          <div>
-            <h5>Slack notification settings</h5>
-            <p>Here you see a list of all GitLab events for all projects within this group that you can switch Slack notifications on for. Remember that you need to set up the app in slack yourself.</p>
-          </div>
-          <div>
-            <p>group data test - full_name: {props.group.full_name}</p>
+      <div className='input-group mb-3'>
+        <div className='input-group-prepend'>
+          <span className='input-group-text font-weight-bold bg-gray text-body' id='prepend1'>Slack app webhook URL</span>
+        </div>
+        <input
+          type='text'
+          className='form-control'
+          id='slackAppUrl'
+          name='slackAppUrl'
+          value={slackAppUrl}
+          onChange={onChangeSlackUrl}
+        />
+        <div className='input-group-append'>
+          <button
+            type='submit'
+            className='btn btn-primary m-0'
+            onClick={handleSlackUrlUpdate}
+          >
+          Update
+          </button>
+        </div>
+      </div>
+
+      {(projectsSettings.length > 0) ? (
+        <div className='card p-0 mt-0 shadow-none'>
+          <div className='card-header font-weight-bold'>Project Notification Settings</div>
+          <div className='card-body bg-white'>
+            <p className='card-text text-body'>Secret tokens must be sent with webhooks. One webhook can be configured per GitLab project. This enables real-time updates to the project's data and notifications in the dashboard. It is also necessary for Slack notifications to work.</p>
+
+            {projectsSettings.map((project, index) =>
+              <div className='card p-0 mt-0 shadow-none' key={index}>
+                <div className='card-header font-weight-bold bg-gray'>{project.name} ({project.id})</div>
+                <div className='card-body bg-white'>
+                  <div className='input-group mb-3'>
+                    <div className='input-group-prepend'>
+                      <span className='input-group-text bg-gray text-body' id={'prepend2-' + index}>Gitlab webhook secret token</span>
+                    </div>
+                    <input
+                      type='text'
+                      className='form-control'
+                      id={'webhookSecret-' + index}
+                      name={'webhookSecret-' + index}
+                      value={project.webhookSecret}
+                      onChange={onChangeHookSecret(index)}
+                    />
+                    <div className='input-group-append'>
+                      <button
+                        type='submit'
+                        className='btn btn-primary m-0'
+                        onClick={() => handleHookSecretUpdate(index, project.id)}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                  <h5>Slack notifications</h5>
+                  <div className='form-check'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      id={'pushCheckBox-' + index}
+                      checked={project.slackNotifications.getPushEvents}
+                      onChange={e => handleSlackNotificationsUpdate(index, project.id, e.target.checked, 'push')}
+                    />
+                    <label className='form-check-label' htmlFor={'pushCheckBox-' + index}>Push events</label>
+                  </div>
+                  <div className='form-check'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      id={'releaseCheckBox-' + index}
+                      checked={project.slackNotifications.getReleaseEvents}
+                      onChange={e => handleSlackNotificationsUpdate(index, project.id, e.target.checked, 'release')}
+                    />
+                    <label className='form-check-label' htmlFor={'releaseCheckBox-' + index}>Release events</label>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       ) : (
-        <div>
-          <br />
-          <p>No group data found...</p>
+        <div className='card bg-white p-0 mt-0 shadow-none'>
+          <div className='card-header font-weight-bold'>Project Notification Settings</div>
+          <div className='card-body'>
+            <p className='card-text'>No projects available for settings. Maintainer access is required for GitLab projects to be able to set up webhooks.</p>
+          </div>
         </div>
       )}
-      <br />
     </div>
   )
 }

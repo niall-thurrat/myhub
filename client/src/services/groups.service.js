@@ -39,6 +39,14 @@ class GroupsService {
   getNotifications (id) {
     return http.get(`${userPath}/groups/${id}/notifications`, options)
   }
+
+  getSettings (id) {
+    return http.get(`${userPath}/groups/${id}/settings`, options)
+  }
+
+  updateSettings (id, data) {
+    return http.patch(`${userPath}/groups/${id}/settings`, data, options)
+  }
 }
 
 export default new GroupsService()

@@ -126,22 +126,22 @@ const Group = props => {
     <div>
       <div className='container mt-3 float-left w-75  p-1'>
         <div>
-          <div class='row-space'>
+          <div className='row-space'>
             <div>
               <h4>Group {view}</h4>
             </div>
             <div>
               <button
-                class='btn btn-default' title='view group dashboard'
+                className='btn btn-default' title='view group dashboard'
                 onClick={handleDashButton}
               >
-                <i class='fa fa-desktop' aria-hidden='true' />
+                <i className='fa fa-desktop' aria-hidden='true' />
               </button>
               <button
-                class='btn btn-default' title='view group settings'
+                className='btn btn-default' title='view group settings'
                 onClick={handleSettingsButton} aria-label='Settings'
               >
-                <i class='fa fa-cog' aria-hidden='true' />
+                <i className='fa fa-cog' aria-hidden='true' />
               </button>
             </div>
           </div>

@@ -74,8 +74,8 @@ const Notifications = props => {
   return (
     <div>
       <div>
-        <a class='btn btn-primary fa-fw'> {/* href='path/to/settings' aria-label='Delete' */}
-          <i class='fa fa-trash' aria-hidden='true'>&nbsp; Clear notifications</i>
+        <a className='btn btn-primary fa-fw'> {/* href='path/to/settings' aria-label='Delete' */}
+          <i className='fa fa-trash' aria-hidden='true'>&nbsp; Clear notifications</i>
         </a>
       </div>
 

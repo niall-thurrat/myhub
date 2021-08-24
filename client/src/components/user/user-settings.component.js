@@ -45,8 +45,12 @@ const UserSettings = props => {
 
       <div className='edit-form'>
         <form>
-          <div className='form-group'>
-            <label htmlFor='gitlabToken'>GitLab Personal Access Token</label>
+          <div className='form-group input-group'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text bg-gray font-weight-bold text-body' id='token-prepend'>
+                GitLab Personal Access Token
+              </span>
+            </div>
             <input
               type='text'
               className='form-control'
@@ -56,8 +60,12 @@ const UserSettings = props => {
               onChange={handleInputChange}
             />
           </div>
-          <div className='form-group'>
-            <label htmlFor='gitlabInstanceUrl'>GitLab instance URL</label>
+          <div className='form-group input-group'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text bg-gray font-weight-bold text-body' id='url-prepend'>
+                GitLab instance URL
+              </span>
+            </div>
             <input
               type='text'
               className='form-control'
@@ -71,7 +79,7 @@ const UserSettings = props => {
 
         <button
           type='submit'
-          className='badge badge-success'
+          className='btn btn-primary m-0'
           onClick={updateSettings}
         >
             Update

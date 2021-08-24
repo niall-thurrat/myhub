@@ -33,8 +33,12 @@ const Profile = props => {
 
       <div className='edit-form'>
         <form>
-          <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+          <div className='form-group input-group'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text bg-gray font-weight-bold text-body' id='name-prepend'>
+                Name
+              </span>
+            </div>
             <input
               type='text'
               className='form-control'
@@ -44,8 +48,12 @@ const Profile = props => {
               onChange={handleInputChange}
             />
           </div>
-          <div className='form-group'>
-            <label htmlFor='email'>Email</label>
+          <div className='form-group input-group'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text bg-gray font-weight-bold text-body' id='email-prepend'>
+                Email
+              </span>
+            </div>
             <input
               type='text'
               className='form-control'
@@ -59,14 +67,14 @@ const Profile = props => {
 
         <button
           type='submit'
-          className='badge badge-success'
+          className='btn btn-primary m-0'
           onClick={updateProfile}
         >
             Update
         </button>
       </div>
 
-      <p />
+      <br />
       <p>
         <strong>myHub ID:</strong> {props.user._id}
       </p>
@@ -78,6 +86,7 @@ const Profile = props => {
       <p>
         <strong>GitLab username:</strong> {props.user.gitlabUsername}
       </p>
+      <br />
 
       {/* TODO gitlabApiConnection must be handled on backend -
       it is important to demonstrate to user that their settings are correct

@@ -89,7 +89,7 @@ export default class GroupSelector extends Component {
             />
             <div className='input-group-append'>
               <button
-                className='btn btn-outline-secondary'
+                className='btn btn-primary m-0'
                 type='button'
                 onClick={this.handleSearchName}
               >
@@ -107,7 +107,7 @@ export default class GroupSelector extends Component {
               groups.map((group, index) => (
                 <li
                   className={
-                    'list-group-item ' +
+                    'list-group-item cursor-pointer ' +
                     (index === currentIndex ? 'active' : '')
                   }
                   onClick={() => this.setActiveGroup(group, index)}
@@ -147,7 +147,7 @@ export default class GroupSelector extends Component {
 
               <Link
                 to={'/groups/' + currentGroup.groupId}
-                className='badge badge-warning'
+                className='btn btn-primary'
               >
                 Go To Dashboard
               </Link>

@@ -83,3 +83,7 @@ label {
   width: auto;
   display: block;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

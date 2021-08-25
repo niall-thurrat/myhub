@@ -1,8 +1,3 @@
-/**
- * User page component
- * @author Niall Thurrat
- */
-
 import React, { useState, useEffect } from 'react'
 import UserService from '../../services/user.service'
 import Profile from './profile.component'

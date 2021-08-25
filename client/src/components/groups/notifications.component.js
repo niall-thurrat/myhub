@@ -1,8 +1,3 @@
-/**
- * Notifications component
- * @author Niall Thurrat
- */
-
 import React, { useState, useEffect } from 'react'
 import { MDBNotification } from 'mdbreact'
 

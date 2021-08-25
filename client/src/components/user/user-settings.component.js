@@ -1,8 +1,3 @@
-/**
- * User settings component
- * @author Niall Thurrat
- */
-
 import React from 'react'
 import UserService from '../../services/user.service'
 

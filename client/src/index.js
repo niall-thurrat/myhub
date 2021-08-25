@@ -1,8 +1,8 @@
 /**
  * The starting point of myHub client application.
+ *
  * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-crud-web-api/
+ * @version 1.0.0
  */
 
 import React from 'react'

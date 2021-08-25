@@ -1,8 +1,3 @@
-/**
- * Releases table component
- * @author Niall Thurrat
- */
-
 import React, { useMemo } from 'react'
 import Table from './table.component'
 

@@ -1,11 +1,3 @@
-/**
- * Login component
- *
- * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-hooks-jwt-auth/
- */
-
 import React, { useState, useRef } from 'react'
 import Form from 'react-validation/build/form'
 import Input from 'react-validation/build/input'

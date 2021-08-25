@@ -1,8 +1,3 @@
-/**
- * Commits data table component
- * @author Niall Thurrat
- */
-
 import React from 'react'
 import { useTable, usePagination } from 'react-table'
 

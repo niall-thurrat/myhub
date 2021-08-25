@@ -1,8 +1,3 @@
-/**
- * Username identifier (from local storage)
- * @author Niall Thurrat
- */
-
 export default function getUsername () {
   const user = JSON.parse(localStorage.getItem('user'))
 

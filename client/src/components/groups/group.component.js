@@ -1,11 +1,3 @@
-/**
- * Group component
- *
- * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-crud-web-api/
- */
-
 import React, { useState, useEffect } from 'react'
 import GroupsService from '../../services/groups.service'
 import socketIOClient from 'socket.io-client'

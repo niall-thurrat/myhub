@@ -1,11 +1,3 @@
-/**
- * App component of myHub client app
- *
- * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-crud-web-api/
- */
-
 import React, { useState, useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 

@@ -1,11 +1,3 @@
-/**
- * Authentication services
- *
- * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-hooks-jwt-auth/
- */
-
 import http from '../http-common'
 
 const signup = (username, email, password) => {

@@ -1,11 +1,3 @@
-/**
- * Group selector component
- *
- * @author Niall Thurrat
- * @credits Got help from bezkoder for this one:
- * https://bezkoder.com/react-crud-web-api/
- */
-
 import React, { Component } from 'react'
 import GroupsService from '../../services/groups.service'
 import { Link } from 'react-router-dom'

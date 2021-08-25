@@ -33,6 +33,7 @@ const notificationsController = async (req, res, next) => {
 
     // use project ids to get notifications from db
     notificationsJson.notifications = await Notification.find({
+      username: username,
       gitlabProjectId: {
         $in: ids
       }
@@ -44,7 +45,7 @@ const notificationsController = async (req, res, next) => {
     notificationsJson.lastViewed = await
     getGroupLastViewed(username, groupId)
 
-    // TODO FIX BUG HERE - notificationsJson.lastViewed is always current dateTime - why?
+    // TODO - FIX BUG HERE - notificationsJson.lastViewed is always current dateTime - why?
 
     res.status(200).json(notificationsJson)
   } catch (error) {

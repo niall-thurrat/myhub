@@ -124,7 +124,7 @@ userSchema.methods.comparePassword = function (loginPassword) {
 
 userSchema.methods.compareHookSecret = async function (hookSecret, projectId) {
   const project = this.settings.projects.find(
-    p => p.projectId === projectId
+    p => p.id === projectId
   )
   return project.webhookSecret === hookSecret
 }

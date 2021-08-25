@@ -3,9 +3,6 @@ import { removeUrlPath, checkNested } from '../../utils/utils'
 import emitter from '../../lib/emitter'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
-require('dotenv').config()
-
-const SLACK_URL = process.env.SLACK_URL
 
 /**
   * GitLab webhook router function
@@ -44,19 +41,20 @@ const hookController = async (req, res, next) => {
   */
 const handlePushHook = async (req, res, next) => {
   try {
+    const user = req.user
     const commits = req.body.commits
     const commitsJson = { commits: [] }
 
-    const note = createNotification(req.body)
-    notificationAddedToDb(note)
-    notifySlack(note)
+    const note = createNotification(req)
+    addNotificationToDb(note)
+    notifySlack(note, user)
 
     // TODO handle if there are more than 20 commits in push
 
     commits.forEach(commit => {
       // relate commit object to its project
       commit.project_id = req.body.project_id
-      // make webhook more consistent with API data
+      // makes webhook more consistent with API data
       commit.author_name = commit.author.name
       commit.created_at = commit.timestamp
 
@@ -79,17 +77,18 @@ const handlePushHook = async (req, res, next) => {
   */
 const handleReleaseHook = async (req, res, next) => {
   try {
+    const user = req.user
     const release = req.body
     const releaseJson = { release: [release] }
 
-    const note = createNotification(release)
-    notificationAddedToDb(note)
-    notifySlack(note)
+    const note = createNotification(req)
+    addNotificationToDb(note)
+    notifySlack(note, user)
 
     // TODO handle what to do with more than 20 releases
 
     releaseJson.release.forEach(release => {
-      // make webhook more consistent with API data
+      // makes webhook more consistent with API data
       release.project_id = release.project.id
       release.tag_name = release.tag
     })
@@ -104,36 +103,39 @@ const handleReleaseHook = async (req, res, next) => {
 /**
   * Creates a Notification json object
   *
-  * @param {Object} data - GitLab webhook json object (req.body)
-  * @return {Object} Notificaiton json
+  * @param {Object} req - request object
+  * @returns {Object} Notificaiton json
   */
-const createNotification = data => {
-  const projectUrl = data.project.web_url
+const createNotification = req => {
+  const hookData = req.body
+  const username = req.user.username
+  const projectUrl = hookData.project.web_url
   let createdBy = null
 
   // get gitlab username in different webhook data stuctures, if applicable
-  if (checkNested(data, 'user_username')) {
-    createdBy = data.user_username
-  } else if (checkNested(data, 'user', 'username')) {
-    createdBy = data.user.username
+  if (checkNested(hookData, 'user_username')) {
+    createdBy = hookData.user_username
+  } else if (checkNested(hookData, 'user', 'username')) {
+    createdBy = hookData.user.username
   }
 
   // get gitlab createdAt if applicable
-  const createdAt = checkNested(data, 'created_at')
-    ? data.created_at : null
+  const createdAt = checkNested(hookData, 'created_at')
+    ? hookData.created_at : null
 
   // get gitlab push total_commits_count if applicable
-  const pushCommitsCount = checkNested(data, 'total_commits_count')
-    ? data.total_commits_count : null
+  const pushCommitsCount = checkNested(hookData, 'total_commits_count')
+    ? hookData.total_commits_count : null
 
   // get gitlab release tag if applicable
-  const releaseTag = checkNested(data, 'tag')
-    ? data.tag : null
+  const releaseTag = checkNested(hookData, 'tag')
+    ? hookData.tag : null
 
   const notification = new Notification({
-    gitlabProjectId: data.project.id,
-    gitlabProjectName: data.project.name,
-    type: data.object_kind,
+    username: username,
+    gitlabProjectId: hookData.project.id,
+    gitlabProjectName: hookData.project.name,
+    type: hookData.object_kind,
     gitlabCreatedAt: createdAt,
     gitlabCreatedBy: createdBy,
     gitlabInstanceUrl: removeUrlPath(projectUrl),
@@ -145,41 +147,46 @@ const createNotification = data => {
 }
 
 /**
-  * Adds Notification to db then returns db Notification object
+  * Adds Notification to db and emits notification event
   *
-  * @param {Notification} notification - object for db
-  * @return {Notification} Notification object from db
+  * @param {Notification} note - Notification object for db
   */
-const notificationAddedToDb = (notification) => {
-  notification.save().then((dbNote, err) => {
-    // TODO these errors should be logged
+const addNotificationToDb = (note) => {
+  note.save().then((dbNote, err) => {
     if (err) {
       console.error(err)
     } else {
-      // TODO emitter should be made from main handling function
-      // TODO are all users receiveing all notifications?
-      // testing from multiple user accounts required
       emitter.emit('notification', dbNote)
     }
   })
 }
 
 /**
-  * Sends a POST request to Slack with notification text
+  * Sends POST requests to Slack with notification text
   *
   * @param {Notification} notification - A GitLab event notification object
   */
-const notifySlack = notification => {
-  const body = { text: doText(notification) }
+const notifySlack = (note, user) => {
+  const project = user.settings.projects.find(p => p.id === note.gitlabProjectId)
+  const slackAppUrl = user.settings.slackAppUrl
+  const body = { text: doText(note) }
+  let send = false
 
-  fetch(SLACK_URL, {
-    headers: { 'Content-type': 'application/json' },
-    method: 'POST',
-    body: JSON.stringify(body)
-  })
-    .catch(err =>
-      console.error(err)
-    )
+  if ((note.type === 'push' && project.slackNotifications.getPushEvents) ||
+      (note.type === 'release' && project.slackNotifications.getReleaseEvents)) {
+    send = true
+  }
+
+  if (send && slackAppUrl) {
+    fetch(slackAppUrl, {
+      headers: { 'Content-type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify(body)
+    })
+      .catch(err =>
+        console.error(err)
+      )
+  }
 }
 
 /**

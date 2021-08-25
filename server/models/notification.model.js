@@ -2,6 +2,10 @@ import mongoose from 'mongoose'
 require('mongoose-type-url')
 
 const notificationSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: true
+  },
   gitlabProjectId: {
     type: Number,
     required: true

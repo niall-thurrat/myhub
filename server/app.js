@@ -1,6 +1,8 @@
 /**
- * The starting point of myHub server application.
+ * myHub server application
+ *
  * @author Niall Thurrat
+ * @version 1.0.0
  */
 
 import express from 'express'
@@ -41,7 +43,6 @@ app.use(bodyParser.json())
 app.use(logger('dev'))
 
 // routes
-// app.use('/api', routes.root)
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', routes.user)
 

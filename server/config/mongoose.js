@@ -1,8 +1,3 @@
-/**
- * Mongoose configuration
- * @author Niall Thurrat
- */
-
 'use strict'
 
 const mongoose = require('mongoose')

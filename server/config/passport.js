@@ -1,11 +1,3 @@
-/**
- * Passport configuration
- *
- * @author Niall Thurrat
- * @credits got a bit of help from Chris Rutherford on this one:
- * https://medium.com/@therealchrisrutherford/nodejs-authentication-with-passport-and-jwt-in-express-3820e256054f
- */
-
 import { Strategy, ExtractJwt } from 'passport-jwt'
 import User from '../models/user.model'
 import dotenv from 'dotenv'

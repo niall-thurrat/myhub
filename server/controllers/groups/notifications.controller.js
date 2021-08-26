@@ -1,19 +1,19 @@
 import Notification from '../../models/notification.model'
 import fetch from 'node-fetch'
 import User from '../../models/user.model'
+import createError from 'http-errors'
+
+const notificationsController = {}
 
 /**
    * Get all notifications for all projects of a group
-   * Handling GET requests to endpoint
-   * /api/users/:username/groups/:id/notifications
+   * GET /api/users/:username/groups/:id/notifications
    *
    * @param {Object} req
    * @param {Object} res
    * @param {Function} next
-   * @response success gives 200 OK with JSON body
-   *
    */
-const notificationsController = async (req, res, next) => {
+notificationsController.get = async (req, res, next) => {
   try {
     const token = req.user.gitlabToken
     const username = req.user.username
@@ -33,6 +33,7 @@ const notificationsController = async (req, res, next) => {
 
     // use project ids to get notifications from db
     notificationsJson.notifications = await Notification.find({
+      isActive: true,
       username: username,
       gitlabProjectId: {
         $in: ids
@@ -42,12 +43,44 @@ const notificationsController = async (req, res, next) => {
       return docs
     })
 
-    notificationsJson.lastViewed = await
-    getGroupLastViewed(username, groupId)
-
-    // TODO - FIX BUG HERE - notificationsJson.lastViewed is always current dateTime - why?
+    notificationsJson.lastViewed = await getGroupLastViewed(username, groupId)
 
     res.status(200).json(notificationsJson)
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
+   * Edit all group notifications for a specific user
+   * PATCH /api/users/:username/groups/:id/notifications
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Function} next
+   */
+notificationsController.edit = async (req, res, next) => {
+  try {
+    const username = req.user.username
+    const ids = req.body.notificationIds
+    const isActive = req.body.isActive
+
+    if (isActive === false) {
+      Notification.updateMany(
+        { username: username, _id: { $in: ids }, isActive: true },
+        { isActive: false },
+        err => {
+          if (err) {
+            console.error(err)
+            next(createError(400, 'notificationIds error'))
+          } else {
+            res.status(204).send()
+          }
+        })
+    } else {
+      next(createError(400,
+        'isActive must be false to deactivate notifications'))
+    }
   } catch (error) {
     next(error)
   }

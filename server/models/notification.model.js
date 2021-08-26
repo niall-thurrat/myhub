@@ -2,6 +2,10 @@ import mongoose from 'mongoose'
 require('mongoose-type-url')
 
 const notificationSchema = mongoose.Schema({
+  isActive: {
+    type: Boolean,
+    default: true
+  },
   username: {
     type: String,
     required: true

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { MDBNotification } from 'mdbreact'
+import GroupsService from '../../services/groups.service'
 
 const Notifications = props => {
-  const [newNotes, setNewNotes] = useState(undefined)
-  const [oldNotes, setOldNotes] = useState(undefined)
+  const [newNotes, setNewNotes] = useState([])
+  const [oldNotes, setOldNotes] = useState([])
 
   useEffect(() => {
     const lastViewed = props.lastViewed
@@ -26,8 +27,8 @@ const Notifications = props => {
         } else oldNoteArray.push(n)
       })
 
-      if (newNoteArray[0]) setNewNotes(newNoteArray)
-      if (oldNoteArray[0]) setOldNotes(oldNoteArray)
+      if (newNoteArray.length > 0) setNewNotes(newNoteArray)
+      if (oldNoteArray.length > 0) setOldNotes(oldNoteArray)
     }
   }, [props])
 
@@ -62,14 +63,45 @@ const Notifications = props => {
         return 'amber-text'
 
       default:
-        return 'doIcon error'
+        return ''
     }
+  }
+
+  const handleRemoveAllButton = () => {
+    const id = props.groupId
+    const noteIds = props.notes.map(note => note._id)
+    const reqBody = {
+      isActive: false,
+      notificationIds: noteIds
+    }
+
+    GroupsService.removeNotifications(id, reqBody)
+      .then(res => {
+        if (res.status === 204) {
+          props.onChange([])
+          setNewNotes([])
+          setOldNotes([])
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const handleRemoveOneButton = (noteId) => {
+    const groupId = props.groupId
+    const reqBody = { isActive: false }
+
+    GroupsService.removeNotification(groupId, noteId, reqBody)
+      .catch(err => {
+        console.error(err)
+      })
   }
 
   return (
     <div>
       <div>
-        <a className='btn btn-primary fa-fw'> {/* href='path/to/settings' aria-label='Delete' */}
+        <a className='btn btn-primary fa-fw' onClick={handleRemoveAllButton}>
           <i className='fa fa-trash' aria-hidden='true'>&nbsp; Clear notifications</i>
         </a>
       </div>
@@ -79,7 +111,7 @@ const Notifications = props => {
       </div>
 
       <div>
-        {newNotes ? (
+        {(newNotes.length > 0) ? (
           newNotes.map((note, index) =>
             <MDBNotification
               key={index}
@@ -89,6 +121,7 @@ const Notifications = props => {
               title={`${note.type} event`}
               text={doTimeDate(note)}
               message={doMessage(note)}
+              onClick={() => handleRemoveOneButton(note._id)}
             />
           )
         ) : (
@@ -103,7 +136,7 @@ const Notifications = props => {
       </div>
 
       <div>
-        {oldNotes ? (
+        {(oldNotes.length > 0) ? (
           oldNotes.map((note, index) =>
             <MDBNotification
               key={index}
@@ -113,6 +146,7 @@ const Notifications = props => {
               title={`${note.type} event`}
               text={doTimeDate(note)}
               message={doMessage(note)}
+              onClick={() => handleRemoveOneButton(note._id)}
             />
           )
         ) : (

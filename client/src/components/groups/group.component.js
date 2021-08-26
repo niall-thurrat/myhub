@@ -6,9 +6,10 @@ import ReleasesTable from './releases-table.component'
 import GroupSettings from './group-settings.component'
 import Notifications from './notifications.component'
 
-const SOCKET_SERVER = 'http://localhost:8080'
-
 const Group = props => {
+  const SOCKET_SERVER = 'http://localhost:8080'
+  const GROUP_ID = props.match.params.id
+
   const initialGroupState = {
     groupId: null,
     full_name: '',
@@ -23,18 +24,13 @@ const Group = props => {
   const [lastViewed, setLastViewed] = useState(undefined)
 
   useEffect(() => {
-    const id = props.match.params.id
     const socket = socketIOClient(SOCKET_SERVER)
 
-    getGroup(id)
-    getCommits(id)
-    getReleases(id)
-    getNotifications(id)
+    getGroup(GROUP_ID)
+    getCommits(GROUP_ID)
+    getReleases(GROUP_ID)
+    getNotifications(GROUP_ID)
 
-    // TODO sort then take most recent 20 commits - how to do
-    // this so that commits state continues to affect table?
-
-    // TODO sort out 20 limit on pagination server side
     socket.on('commitData', newCommits => {
       setCommits(prevCommits => {
         const joinedArray = prevCommits.concat(newCommits.commits)
@@ -45,7 +41,6 @@ const Group = props => {
       })
     })
 
-    // TODO sort out 20 limit on pagination server side
     socket.on('releaseData', newRelease => {
       setReleases(prevReleases => {
         const joinedArray = prevReleases.concat(newRelease.release)
@@ -63,7 +58,7 @@ const Group = props => {
     })
 
     return () => socket.disconnect()
-  }, [props.match.params.id])
+  }, [GROUP_ID])
 
   const getGroup = groupId => {
     GroupsService.get(groupId)
@@ -112,6 +107,10 @@ const Group = props => {
 
   const handleSettingsButton = () => {
     setView('Settings')
+  }
+
+  const handleRemovedNotifications = newArr => {
+    setNotifications(newArr)
   }
 
   return (
@@ -169,7 +168,12 @@ const Group = props => {
       </div>
 
       <div className='container mt-3 float-right w-25 p-1'>
-        <Notifications notes={notifications} lastViewed={lastViewed} />
+        <Notifications
+          groupId={currentGroup.groupId}
+          notes={notifications}
+          lastViewed={lastViewed}
+          onChange={handleRemovedNotifications}
+        />
       </div>
 
     </div>

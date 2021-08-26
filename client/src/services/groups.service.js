@@ -3,9 +3,7 @@ import authHeader from './auth-header'
 import username from './username'
 
 const userPath = `/users/${username()}`
-const options = {
-  headers: authHeader()
-}
+const options = { headers: authHeader() }
 
 class GroupsService {
   getAll () {
@@ -30,6 +28,14 @@ class GroupsService {
 
   getNotifications (id) {
     return http.get(`${userPath}/groups/${id}/notifications`, options)
+  }
+
+  removeNotifications (id, data) {
+    return http.patch(`${userPath}/groups/${id}/notifications`, data, options)
+  }
+
+  removeNotification (groupId, noteId, data) {
+    return http.patch(`${userPath}/groups/${groupId}/notifications/${noteId}`, data, options)
   }
 
   getSettings (id) {

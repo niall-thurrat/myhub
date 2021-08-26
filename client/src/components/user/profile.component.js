@@ -80,14 +80,6 @@ const Profile = props => {
       </p>
       <br />
 
-      {/* TODO gitlabApiConnection must be handled on backend -
-      it is important to demonstrate to user that their settings are correct
-      <p>
-        <strong>Connected to GitLab API:</strong>
-        {props.user.gitlabApiConnection.toString()}
-      </p> */}
-
-      {/* TODO handle password edit */}<p />
     </div>
   )
 }

@@ -35,7 +35,6 @@ const vusername = (value) => {
     )
   }
 }
-// TODO handle non unique username client side
 
 const vpassword = (value) => {
   if (value.length < 8 || value.length > 40) {
@@ -46,8 +45,6 @@ const vpassword = (value) => {
     )
   }
 }
-
-// TODO either give name option here or remove from server side
 
 const Signup = (props) => {
   const form = useRef()

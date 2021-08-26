@@ -32,12 +32,6 @@ const UserSettings = props => {
       the scope(s) at any time. You can also delete the reference to the token here in myHub.
       </p>
 
-      {/* TODO handle gitlabApiConnection property backend before applying this detail
-      <p>
-      NOTE! Succesful connection to your gitlab account API is indicated
-      above in 'Connected to GitLab API'
-      </p> */}
-
       <div className='edit-form'>
         <form>
           <div className='form-group input-group'>

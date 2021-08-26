@@ -11,10 +11,7 @@ export default class Home extends Component {
               Welcome to myHub!
         </p>
         <p>
-              myHub lets you access your GitLab data and get notifications on important events as well as set up notifications on Slack so you dont miss a thing.
-        </p>
-        <p>
-              Please login to access your GitLab group dashboards.
+              myHub lets you access your GitLab data and get notifications on important events as well as set up notifications to Slack so you dont miss a thing.
         </p>
       </div>
     )

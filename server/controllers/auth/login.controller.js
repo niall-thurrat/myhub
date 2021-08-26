@@ -7,7 +7,7 @@ dotenv.config()
 
 /**
    * User login controller
-   * Handling POST requests to endpoint /api/auth/login
+   * POST /api/auth/login
    *
    * @param {Object} req
    * @param {Object} res

@@ -37,7 +37,6 @@ const hookController = async (req, res, next) => {
   * @param {Object} req - Request object
   * @param {Object} res - Response object
   * @param {Function} next - Next middleware func
-  *
   */
 const handlePushHook = async (req, res, next) => {
   try {
@@ -48,8 +47,6 @@ const handlePushHook = async (req, res, next) => {
     const note = createNotification(req)
     addNotificationToDb(note)
     notifySlack(note, user)
-
-    // TODO handle if there are more than 20 commits in push
 
     commits.forEach(commit => {
       // relate commit object to its project
@@ -73,7 +70,6 @@ const handlePushHook = async (req, res, next) => {
   * @param {Object} req - Request object
   * @param {Object} res - Response object
   * @param {Function} next - Next middleware func
-  *
   */
 const handleReleaseHook = async (req, res, next) => {
   try {
@@ -84,8 +80,6 @@ const handleReleaseHook = async (req, res, next) => {
     const note = createNotification(req)
     addNotificationToDb(note)
     notifySlack(note, user)
-
-    // TODO handle what to do with more than 20 releases
 
     releaseJson.release.forEach(release => {
       // makes webhook more consistent with API data
@@ -164,7 +158,8 @@ const addNotificationToDb = (note) => {
 /**
   * Sends POST requests to Slack with notification text
   *
-  * @param {Notification} notification - A GitLab event notification object
+  * @param {Notification} note - A GitLab event notification object
+  * @param {Object} user - authorised user object
   */
 const notifySlack = (note, user) => {
   const project = user.settings.projects.find(p => p.id === note.gitlabProjectId)

@@ -3,11 +3,11 @@ import createError from 'http-errors'
 
 /**
   * User signup controller
-  * Handling POST requests to endpoint /api/auth/signup
+  * POST /api/auth/signup
   *
   * @param {Object} req
   * @param {Object} res
-  * @param {Function} next - Next middleware func
+  * @param {Function} next
   *
   */
 const signupController = async (req, res, next) => {

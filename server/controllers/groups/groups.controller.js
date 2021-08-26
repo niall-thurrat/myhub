@@ -5,13 +5,11 @@ import updateViewsInDb from '../../lib/viewsDbUpdater'
 
 /**
  * Get a user's GitLab groups (simplified)
- * Handling GET requests to endpoint /api/users/:username/groups
+ * GET /api/users/:username/groups
  *
  * @param {Object} req
  * @param {Object} res
- * @param {Function} next - Next middleware func
- * @response success gives 200 OK with JSON body
- *
+ * @param {Function} next
  */
 const groupsController = (req, res, next) => {
   const token = req.user.gitlabToken

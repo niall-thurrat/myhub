@@ -5,12 +5,11 @@ import updateViewsInDb from '../../lib/viewsDbUpdater'
 
 /**
  * Get one group of a user by id
- * Handling GET requests to endpoint /api/users/:username/groups/:id
+ * GET /api/users/:username/groups/:id
  *
  * @param {Object} req
  * @param {Object} res
- * @param {Function} next - Next middleware func
- * @response success gives 200 OK with JSON body
+ * @param {Function} next
  *
  */
 const groupController = async (req, res, next) => {

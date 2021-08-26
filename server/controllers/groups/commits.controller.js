@@ -2,12 +2,11 @@ import fetch from 'node-fetch'
 
 /**
  * Get all commits for all projects of a group
- * Handling GET requests to endpoint /api/users/:username/groups/:id/commits
+ * GET /api/users/:username/groups/:id/commits
  *
  * @param {Object} req
  * @param {Object} res
- * @param {Function} next - Next middleware func
- * @response success gives 200 OK with JSON body
+ * @param {Function} next
  *
  */
 const commitsController = async (req, res, next) => {
@@ -24,8 +23,6 @@ const commitsController = async (req, res, next) => {
       .then(res => res.json())
       .then(projects => projects.map(p => p.id))
 
-    // TODO HANDLE HOW MANY COMMITS YOU WANT HERE
-    // CURRENTLY GETTING 20 MAX PER PROJECT DUE TO PAGINATION
     const requests = ids.map(id => fetch(
         `${url}/api/v4/projects/${id}/repository/commits`, params
     ))
@@ -41,7 +38,6 @@ const commitsController = async (req, res, next) => {
           resJson.forEach(commit => {
             commit.project_id = ids[index]
           })
-          // returns array of commit objects
           return resJson
         })
       ))

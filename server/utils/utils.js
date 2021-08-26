@@ -34,7 +34,7 @@ export function removeUrlPath (url) {
  * https://stackoverflow.com/questions/2631001/test-for-existence-of-nested-javascript-object-key
  * @param {Object} obj - object to be checked
  * @param {String} level, ...rest - any number of nested keys of obj
- * @return {Bool}
+ * @returns {Bool}
  */
 export function checkNested (obj, level, ...rest) {
   if (obj === undefined) return false

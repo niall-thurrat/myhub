@@ -6,13 +6,11 @@ const userController = {}
 
 /**
   * Get user
-  * Handling GET requests to endpoint /api/users/:username
+  * GET /api/users/:username
   *
   * @param {Object} req
   * @param {Object} res
-  * @param {Function} next - Next middleware func
-  * @response success gives 200 OK with JSON body
-  *
+  * @param {Function} next
   */
 userController.get = async (req, res, next) => {
   const username = req.user.username
@@ -25,13 +23,12 @@ userController.get = async (req, res, next) => {
   }
 
   updateViewsInDb(req)
-
   res.status(200).json(resBody)
 }
 
 /**
   * Edit user (only gitlabId + token at present)
-  * Handling POST requests to endpoint /api/users/:username
+  * POST /api/users/:username
   *
   * @param {Object} req
   * @param {Object} res
@@ -41,7 +38,6 @@ userController.get = async (req, res, next) => {
   */
 userController.edit = async (req, res, next) => {
   try {
-    // TODO password change must be managed
     const username = req.user.username
     const url = req.body.gitlabInstanceUrl || req.user.gitlabInstanceUrl
     const name = req.body.name
@@ -52,9 +48,6 @@ userController.edit = async (req, res, next) => {
 
     // updates token for future GitLab API requests
     if (token) req.user.gitlabToken = token
-
-    // TODO checkTokenWorks = (next, groupsUrl, token)
-    // and edit gitlabApiConnection property accordingly
 
     const editData = {
       name: name,
@@ -75,7 +68,7 @@ userController.edit = async (req, res, next) => {
           return next(createError(404,
             'error finding user', err
           ))
-        } // TODO handle if no data changes
+        }
         const resBody = {
           edit_success: true,
           description: 'updated user data held by myHub '
@@ -87,34 +80,5 @@ userController.edit = async (req, res, next) => {
     next(error)
   }
 }
-
-// TODO get below GitLab API connection check working - currently produces
-// Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-
-// /**
-//   * Check if token enables access to a user's API data
-//   *
-//   * @param {Function} next - Next middleware func
-//   * @param {String} groupsUrl - url to a user's groups through the GitLab API
-//   * @param {String} token - GitLab Personal Access Token
-//   * @returns {boolean}
-//   *
-//   */
-// const checkTokenWorks = (next, groupsUrl, token) => {
-//   fetch(groupsUrl, {
-//     headers: { 'PRIVATE-TOKEN': token }
-//   })
-//     .then(res => {
-//       console.log('FETCH SENT AND RES RECEIVED')
-//       if (res.statusCode === 200) {
-//         return true
-//       } else {
-//         return false
-//       }
-//     })
-//     .catch(error => {
-//       next(createError(error))
-//     })
-// }
 
 export default userController

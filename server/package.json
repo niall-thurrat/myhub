@@ -2,10 +2,10 @@
   "name": "myhub",
   "version": "1.0.0",
   "description": "A web app for GitLab data and notifications.",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node -r esm app.js",
-    "dev": "nodemon -r esm app.js"
+    "start": "node -r esm server.js",
+    "dev": "nodemon -r esm server.js"
   },
   "repository": {
     "type": "git",

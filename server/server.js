@@ -13,9 +13,9 @@ import passport from 'passport'
 import passportConfig from './config/passport'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import createError from 'http-errors'
 import { routes } from './routes'
 import emitter from './lib/emitter'
+import path from 'path'
 const logger = require('morgan')
 
 const app = express()
@@ -41,10 +41,16 @@ passportConfig(passport)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(logger('dev'))
+app.use(express.static(path.join(__dirname, 'client', 'build')))
 
 // routes
 app.use('/api/auth', routes.auth)
 app.use('/api/users/:username', routes.user)
+
+// forward unrecognized requests to client
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+})
 
 // websocket connection to client
 io.on('connection', socket => {
@@ -60,9 +66,6 @@ io.on('connection', socket => {
     socket.emit('notesData', data)
   })
 })
-
-// catch 404 errors
-app.use('*', (req, res, next) => next(createError(404)))
 
 // custom error handler
 app.use((error, req, res, next) => {

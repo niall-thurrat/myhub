@@ -16,7 +16,6 @@ import cors from 'cors'
 import { routes } from './routes'
 import emitter from './lib/emitter'
 import path from 'path'
-const logger = require('morgan')
 
 const app = express()
 const httpServer = createServer(app)
@@ -40,8 +39,13 @@ app.use(passport.initialize())
 passportConfig(passport)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(logger('dev'))
 app.use(express.static(path.join(__dirname, 'client', 'build')))
+
+// code for dev only
+if (process.env.NODE_ENV !== 'production') {
+  const logger = require('morgan')
+  app.use(logger('dev'))
+}
 
 // routes
 app.use('/api/auth', routes.auth)

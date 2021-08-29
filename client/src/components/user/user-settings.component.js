@@ -1,26 +1,36 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import UserService from '../../services/user.service'
 
-const UserSettings = props => {
-  const handleInputChange = event => {
-    const { name, value } = event.target
-    props.onChange({ ...props.user, [name]: value })
+const UserSettings = () => {
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    UserService.getUser().then(
+      (response) => {
+        setUser(response.data.user)
+      },
+      (error) => console.error(error)
+    )
+  }, [])
+
+  function handleGitlabTokenChange (e) {
+    setUser({ ...user, gitlabToken: e.target.value })
+  }
+
+  function handleGitlabInstanceUrlChange (e) {
+    setUser({ ...user, gitlabInstanceUrl: e.target.value })
   }
 
   const updateSettings = () => {
-    UserService.updateUser(props.user)
-      .then(response => {
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    UserService.updateUser(user)
+      .catch(error => { console.error(error) })
   }
 
   return (
     <div className='container'>
-      <header className='jumbotron'>
+      <header className='mt-4 mb-4'>
         <h3>
-       User Settings
+          Settings
         </h3>
       </header>
       <p>
@@ -43,10 +53,10 @@ const UserSettings = props => {
             <input
               type='text'
               className='form-control'
-              id='gitlabToken'
-              name='gitlabToken'
-              value={props.user.gitlabToken}
-              onChange={handleInputChange}
+              id='gitlab-token'
+              name='gitlab-token'
+              value={user.gitlabToken}
+              onChange={handleGitlabTokenChange}
             />
           </div>
           <div className='form-group input-group'>
@@ -60,8 +70,8 @@ const UserSettings = props => {
               className='form-control'
               id='gitlabInstanceUrl'
               name='gitlabInstanceUrl'
-              value={props.user.gitlabInstanceUrl}
-              onChange={handleInputChange}
+              value={user.gitlabInstanceUrl}
+              onChange={handleGitlabInstanceUrlChange}
             />
           </div>
         </form>

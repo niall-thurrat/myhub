@@ -12,7 +12,8 @@ import AuthService from './services/auth.service'
 import Login from './components/auth/login.component'
 import Signup from './components/auth/signup.component'
 import Home from './components/home.component'
-import UserPage from './components/user/user-page.component'
+import UserSettings from './components/user/user-settings.component'
+import Profile from './components/user/profile.component'
 import GroupSelector from './components/groups/group-selector.component'
 import Group from './components/groups/group.component'
 
@@ -51,7 +52,12 @@ const App = () => {
         {currentUser ? (
           <div className='navbar-nav ml-auto'>
             <li className='nav-item'>
-              <Link to='/user' className='nav-link'>
+              <Link to='/user-settings' className='nav-link'>
+                Settings
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/profile' className='nav-link'>
                 {currentUser.username}
               </Link>
             </li>
@@ -83,7 +89,8 @@ const App = () => {
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
-          <Route exact path='/user' component={UserPage} />
+          <Route exact path='/user-settings' component={UserSettings} />
+          <Route exact path='/profile' component={Profile} />
           <Route exact path='/groups' component={GroupSelector} />
           <Route path='/groups/:id' component={Group} />
         </Switch>

@@ -29,7 +29,7 @@ mongoose.run().catch(error => {
 })
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://myhub-app.herokuapp.com'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
 }
 

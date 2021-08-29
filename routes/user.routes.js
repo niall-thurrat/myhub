@@ -9,6 +9,7 @@ import releasesController from '../controllers/groups/releases.controller'
 import notificationsController from '../controllers/groups/notifications.controller'
 import notificationController from '../controllers/groups/notification.controller'
 import settingsController from '../controllers/groups/settings.controller'
+import slackTestController from '../controllers/groups/slack-test.controller'
 import hooksController from '../controllers/hooks/hooks.controller'
 
 import { hookAuth } from '../middleware/webhook.auth'
@@ -31,6 +32,7 @@ userRouter.patch('/groups/:id/notifications/:note_id', userAuth, notificationCon
 userRouter.route('/groups/:id/settings')
   .get(userAuth, settingsController.get)
   .patch(userAuth, settingsController.edit)
+userRouter.get('/groups/:id/settings/slack-test', userAuth, slackTestController)
 
 userRouter.post('/hooks', hookAuth, hooksController)
 

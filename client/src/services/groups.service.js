@@ -45,6 +45,10 @@ class GroupsService {
   updateSettings (id, data) {
     return http.patch(`${userPath}/groups/${id}/settings`, data, options)
   }
+
+  getSlackConnectionStatus (id) {
+    return http.get(`${userPath}/groups/${id}/settings/slack-test`, options)
+  }
 }
 
 export default new GroupsService()

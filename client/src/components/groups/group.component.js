@@ -115,7 +115,7 @@ const Group = props => {
 
   return (
     <div>
-      <div className='container mt-3 float-left w-75  p-1'>
+      <div className='container mt-3 float-left w-75  p-1 pl-3'>
         <div>
           <div className='row-space'>
             <div>

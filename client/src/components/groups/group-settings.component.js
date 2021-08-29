@@ -3,6 +3,7 @@ import GroupsService from '../../services/groups.service'
 
 const GroupSettings = props => {
   const [slackAppUrl, setSlackAppUrl] = useState('')
+  const [slackTestResult, setSlackTestResult] = useState('not tested')
   const [projectsSettings, setProjectsSettings] = useState([])
 
   useEffect(() => {
@@ -15,9 +16,7 @@ const GroupSettings = props => {
         setSlackAppUrl(response.data.slackAppUrl)
         setProjectsSettings(response.data.projects)
       })
-      .catch(err => {
-        console.error(err)
-      })
+      .catch(error => console.error(error))
   }
 
   const onChangeSlackUrl = (e) => {
@@ -31,8 +30,23 @@ const GroupSettings = props => {
       slackAppUrl: slackAppUrl
     }
     GroupsService.updateSettings(id, settings)
-      .catch(err => {
-        console.error(err)
+      .catch(error => console.error(error))
+  }
+
+  const handleSlackTest = () => {
+    const id = props.group.groupId
+    GroupsService.getSlackConnectionStatus(id)
+      .then(res => {
+        if (res.status === 200 && res.data.slackResponseStatus === 200) {
+          setSlackTestResult('Connected: 200 OK')
+        } else {
+          setSlackTestResult(`Not connected: myHub response ${res.status}, slack response ${res.body.slackResponseStatus || '---'}`)
+        }
+      })
+      .catch(error => {
+        debugger // eslint-disable-line no-debugger
+        console.error(error)
+        setSlackTestResult('Not connected: myHub response not OK')
       })
   }
 
@@ -81,26 +95,53 @@ const GroupSettings = props => {
 
   return (
     <div>
-      <div className='input-group mb-3'>
-        <div className='input-group-prepend'>
-          <span className='input-group-text font-weight-bold bg-gray text-body' id='prepend1'>Slack app webhook URL</span>
-        </div>
-        <input
-          type='text'
-          className='form-control'
-          id='slackAppUrl'
-          name='slackAppUrl'
-          value={slackAppUrl}
-          onChange={onChangeSlackUrl}
-        />
-        <div className='input-group-append'>
-          <button
-            type='submit'
-            className='btn btn-primary m-0'
-            onClick={handleSlackUrlUpdate}
-          >
-          Update
-          </button>
+      <div className='card p-0 mt-0 shadow-none'>
+        <div className='card-header font-weight-bold'>Slack App Settings</div>
+        <div className='card-body bg-white'>
+          <div className='input-group mb-3'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text font-weight-bold bg-gray text-body' id='prepend1'>Slack webhook URL</span>
+            </div>
+            <input
+              type='text'
+              className='form-control'
+              id='slackAppUrl'
+              name='slackAppUrl'
+              value={slackAppUrl}
+              onChange={onChangeSlackUrl}
+            />
+            <div className='input-group-append'>
+              <button
+                type='submit'
+                className='btn btn-primary m-0'
+                onClick={handleSlackUrlUpdate}
+              >
+                Update
+              </button>
+            </div>
+          </div>
+          <div className='input-group mb-3'>
+            <div className='input-group-prepend'>
+              <span className='input-group-text font-weight-bold bg-gray text-body' id='slack-test'>Slack connection status</span>
+            </div>
+            <input
+              readOnly
+              type='text'
+              className='form-control bg-white'
+              id='slackTest'
+              name='slackTest'
+              value={slackTestResult}
+            />
+            <div className='input-group-append'>
+              <button
+                type='submit'
+                className='btn btn-primary m-0'
+                onClick={handleSlackTest}
+              >
+                Test
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -123,7 +164,7 @@ const GroupSettings = props => {
                       className='form-control'
                       id={'webhookSecret-' + index}
                       name={'webhookSecret-' + index}
-                      value={project.webhookSecret}
+                      value={project.webhookSecret || ''}
                       onChange={onChangeHookSecret(index)}
                     />
                     <div className='input-group-append'>
